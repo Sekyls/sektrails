@@ -36,6 +36,7 @@ export enum TMDBApiPaths {
   // Discover
   DiscoverMovie = "/discover/movie",
   DiscoverTv = "/discover/tv",
+  DiscoverMovie2025 = "/discover/movie?primary_release_year=2025&sort_by=popularity.desc",
 }
 
 export type TMDBMovie = {

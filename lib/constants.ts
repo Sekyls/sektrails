@@ -58,6 +58,8 @@ export const MOVIE_SECTIONS = [
     queryKey: "popular-shows",
     url: TMDBApiPaths.TvPopular,
   },
+];
+export const MOVIE_SECTIONS_2 = [
   {
     category: "Top Rated Shows",
     seeAllLink: "#",
@@ -81,5 +83,68 @@ export const MOVIE_SECTIONS = [
     seeAllLink: "#",
     queryKey: "week-trends",
     url: TMDBApiPaths.Trending,
+  },
+];
+
+export const SOCIAL_LINKS = [
+  {
+    name: "Email",
+    webUrl:
+      "mailto:denipsyp@gmail.com?subject=Hello&body=I%20want%20to%20contact%20you",
+    imgPath: "/socials/email.png",
+  },
+  {
+    name: "Telephone",
+    webUrl: "tel:+233596379243",
+    imgPath: "/socials/telephone.png",
+  },
+  {
+    name: "LinkedIn",
+    webUrl: "https://www.linkedin.com/in/sekyls",
+    imgPath: "/socials/linkedin.png",
+  },
+  {
+    name: "WhatsApp",
+    webUrl: "https://wa.me/233203558362",
+    imgPath: "/socials/whatsapp.png",
+  },
+  {
+    name: "Instagram",
+    webUrl: "https://www.instagram.com/opoku_sekyi_dennis/",
+    imgPath: "/socials/instagram.png",
+  },
+  {
+    name: "Telegram",
+    webUrl: "https://t.me/Opoku_Sekyi_Dennis",
+    imgPath: "/socials/telegram.png",
+  },
+  {
+    name: "GitHub",
+    webUrl: "https://github.com/Sekyls",
+    imgPath: "/socials/github.png",
+  },
+];
+
+export const FOOTER_LINKS = [
+  {
+    header: "Quick Links",
+    links: [
+      { title: "Popular Shows", sublink: "" },
+      { title: "Currently In Theaters", sublink: "" },
+      { title: "Upcoming Releases", sublink: "" },
+      { title: "Top Rated Movies", sublink: "" },
+      { title: "Popular Movies", sublink: "" },
+      { title: "Currently Airing", sublink: "" },
+      { title: "Top Rated Shows", sublink: "" },
+      { title: "Week Trends", sublink: "" },
+      { title: "Airing Today", sublink: "" },
+    ],
+  },
+  {
+    header: "About Us",
+    links: [
+      { title: "Contact", sublink: "" },
+      { title: "Documentation", sublink: "" },
+    ],
   },
 ];

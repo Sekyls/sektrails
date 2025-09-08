@@ -18,7 +18,7 @@ const NavigationDesktop = ({ isOpen, setIsOpen }: MobileToggleProps) => {
         <Link href={"/"}>
           {" "}
           <Image
-            src={"/logos/sekflix.png"}
+            src={"/logos/sektrails.png"}
             width={150}
             height={103}
             alt="Sekflix logo"

@@ -62,7 +62,7 @@ export default function MovieSection({
       <div className="flex justify-between items-center text-primary font-bold">
         <h4>{category}</h4>
         <Link href={seeAllLink || ""} className="flex gap-x-1 items-center">
-          <h5> See all</h5>
+          <p className="text-3xl"> See all</p>
           <ArrowRight size={18} />
         </Link>
       </div>
@@ -75,7 +75,9 @@ export default function MovieSection({
                 key={index}
               >
                 <MovieCard
-                  image={"https://image.tmdb.org/t/p/w500" + movie?.poster_path}
+                  image={
+                    "https://image.tmdb.org/t/p/original" + movie?.poster_path
+                  }
                   imgAlt={movie?.title || movie.name}
                   title={movie?.title || movie.name}
                 />

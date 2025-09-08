@@ -1,10 +1,16 @@
 import type { Metadata } from "next";
-import { Bebas_Neue, Inter } from "next/font/google";
+import { Bebas_Neue, Inter, Leckerli_One } from "next/font/google";
 import "./globals.css";
 import NavigationBar from "@/components/navigation-menu";
 import TanstackQueryProvider from "@/providers/tanstack-query-provider";
 import { ThemeProvider } from "@/providers/theme-provider";
 
+const leckerli = Leckerli_One({
+  variable: "--font-leckerli",
+  weight: ["400"],
+  subsets: ["latin"],
+  display: "swap",
+});
 const bebasNeue = Bebas_Neue({
   variable: "--font-Bebas-Neue",
   weight: ["400"],
@@ -120,7 +126,7 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body
-        className={`${inter.className}  antialiased overflow-x-hidden scroll-smooth`}
+        className={`${inter.className} ${bebasNeue.variable} ${leckerli.variable}  antialiased overflow-x-hidden scroll-smooth`}
       >
         <ThemeProvider
           attribute="class"
