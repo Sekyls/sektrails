@@ -135,7 +135,6 @@ export default function RootLayout({
           disableTransitionOnChange
         >
           <TanstackQueryProvider>
-            <NavigationBar />
             {children}
           </TanstackQueryProvider>
         </ThemeProvider>

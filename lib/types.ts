@@ -1,3 +1,4 @@
+import { Icon } from "@tabler/icons-react";
 import { Dispatch, SetStateAction } from "react";
 
 export type MobileToggleProps = {
@@ -114,3 +115,18 @@ export type MovieSectionsProps = {
   queryKey: string;
   url: TMDBApiPaths;
 };
+
+type SubCategory = {
+  title: string;
+  url: string;
+  icon: Icon;
+};
+
+type Category = {
+  categoryName: string;
+  subCategories: SubCategory[];
+};
+
+export type SideBarCategoriesProps = Array<{
+  category: Category;
+}>;

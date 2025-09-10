@@ -1,4 +1,18 @@
 import { TMDBApiPaths } from "./types";
+import {
+  IconBookmarkFilled,
+  IconCalendar,
+  IconDeviceTv,
+  IconHelp,
+  IconMovie,
+  IconPlayerPlay,
+  IconSearch,
+  IconStarFilled,
+  IconUserCircle,
+  IconUserScreen,
+  IconView360,
+  IconWorldStar,
+} from "@tabler/icons-react";
 
 export const TRAILERS = [
   {
@@ -148,3 +162,84 @@ export const FOOTER_LINKS = [
     ],
   },
 ];
+
+export const SIDEBAR_DATA = {
+  user: {
+    name: "Guest",
+    email: "m@example.com",
+    avatar: "",
+  },
+  mainCategories: [
+    {
+      category: {
+        categoryName: "Movies",
+        subCategories: [
+          {
+            title: "Popular",
+            url: "/specialties/movie/popular",
+            icon: IconView360,
+          },
+          {
+            title: "Top Rated",
+            url: "/specialties/movie/top_rated",
+            icon: IconStarFilled,
+          },
+          {
+            title: "Upcoming Releases",
+            url: "/specialties/movie/upcoming",
+            icon: IconCalendar,
+          },
+          {
+            title: "Currently In Theaters",
+            url: "/specialties/movie/now_playing",
+            icon: IconPlayerPlay,
+          },
+        ],
+      },
+    },
+    {
+      category: {
+        categoryName: "TV",
+        subCategories: [
+          {
+            title: "Popular",
+            url: "/specialties/tv/popular",
+            icon: IconMovie,
+          },
+          {
+            title: "Top Rated",
+            url: "/specialties/tv/top_rated",
+            icon: IconWorldStar,
+          },
+          {
+            title: "Currently Airing",
+            url: "/specialties/tv/on_the_air",
+            icon: IconUserScreen,
+          },
+          {
+            title: "Airing Today",
+            url: "/specialties/tv/airing_today",
+            icon: IconDeviceTv,
+          },
+        ],
+      },
+    },
+  ],
+  navSecondary: [
+    {
+      title: "Bookmarks",
+      url: "#",
+      icon: IconBookmarkFilled,
+    },
+    {
+      title: "Learn More",
+      url: "#",
+      icon: IconHelp,
+    },
+    {
+      title: "Search",
+      url: "#",
+      icon: IconSearch,
+    },
+  ],
+};

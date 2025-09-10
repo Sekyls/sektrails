@@ -2,6 +2,7 @@
 import Footer from "@/components/footer";
 import MoreForYou from "@/components/more-for-you-banner";
 import MovieSection from "@/components/movie-section";
+import NavigationBar from "@/components/navigation-menu";
 import TrailersCarousel from "@/components/trailer-carousel";
 import WidthConstraint from "@/components/ui/width-constraint";
 import { MOVIE_SECTIONS, MOVIE_SECTIONS_2 } from "@/lib/constants";
@@ -10,6 +11,9 @@ import React from "react";
 const Home = () => {
   return (
     <>
+      <header>
+        <NavigationBar />
+      </header>
       <section>
         <TrailersCarousel />
         <article className="space-y-20">
