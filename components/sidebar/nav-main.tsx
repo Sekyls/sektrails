@@ -9,6 +9,7 @@ import {
 import { Video } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { SideBarCategoriesProps } from "@/lib/types";
+import { cn } from "@/lib/utils";
 
 export function NavMain({ items }: { items: SideBarCategoriesProps }) {
   const router = useRouter();
@@ -35,13 +36,15 @@ export function NavMain({ items }: { items: SideBarCategoriesProps }) {
                 </h5>
                 {cat.category.subCategories.map((subcat, subindex) => {
                   return (
-                    <SidebarMenuItem key={subindex} className="mb-2">
+                    <SidebarMenuItem key={subindex} className={cn("mb-2")}>
                       <SidebarMenuButton
                         tooltip={subcat.title}
                         onClick={() => {
                           router.replace(subcat.url);
                         }}
-                        className="hover:bg-primary hover:text-white"
+                        className={cn(
+                          "hover:bg-primary hover:text-white",
+                        )}
                       >
                         {subcat.icon && <subcat.icon />}
                         <span>{subcat.title}</span>

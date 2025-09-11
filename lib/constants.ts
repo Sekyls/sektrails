@@ -8,7 +8,7 @@ import {
   IconPlayerPlay,
   IconSearch,
   IconStarFilled,
-  IconUserCircle,
+  IconTrendingUp,
   IconUserScreen,
   IconView360,
   IconWorldStar,
@@ -44,31 +44,31 @@ export const TRAILERS = [
 export const MOVIE_SECTIONS = [
   {
     category: "Popular Movies",
-    seeAllLink: "#",
+    seeAllLink: "/specialties/movie/popular",
     queryKey: "popular-movies",
     url: TMDBApiPaths.MoviePopular,
   },
   {
     category: "Top Rated Movies",
-    seeAllLink: "#",
+    seeAllLink: "/specialties/movie/top_rated",
     queryKey: "top-rated-movies",
     url: TMDBApiPaths.MovieTopRated,
   },
   {
     category: "Upcoming Releases",
-    seeAllLink: "#",
+    seeAllLink: "/specialties/movie/upcoming",
     queryKey: "upcoming-releases",
     url: TMDBApiPaths.MovieUpcoming,
   },
   {
     category: "Currently In Theaters",
-    seeAllLink: "#",
+    seeAllLink: "/specialties/movie/now_playing",
     queryKey: "currently-in-theaters",
     url: TMDBApiPaths.MovieNowPlaying,
   },
   {
     category: "Popular Shows",
-    seeAllLink: "#",
+    seeAllLink: "/specialties/tv/popular",
     queryKey: "popular-shows",
     url: TMDBApiPaths.TvPopular,
   },
@@ -76,25 +76,25 @@ export const MOVIE_SECTIONS = [
 export const MOVIE_SECTIONS_2 = [
   {
     category: "Top Rated Shows",
-    seeAllLink: "#",
+    seeAllLink: "/specialties/tv/top_rated",
     queryKey: "Top-Rated-Shows",
     url: TMDBApiPaths.TvTopRated,
   },
   {
     category: "Currently Airing",
-    seeAllLink: "#",
+    seeAllLink: "/specialties/tv/on_the_air",
     queryKey: "currently-airing",
     url: TMDBApiPaths.TvOnTheAir,
   },
   {
     category: "Airing Today",
-    seeAllLink: "#",
+    seeAllLink: "/specialties/tv/airing_today",
     queryKey: "airing-today",
     url: TMDBApiPaths.TvAiringToday,
   },
   {
-    category: "Week Trends",
-    seeAllLink: "#",
+    category: "Trending This Week",
+    seeAllLink: "/specialties/trending/all/week",
     queryKey: "week-trends",
     url: TMDBApiPaths.Trending,
   },
@@ -143,15 +143,21 @@ export const FOOTER_LINKS = [
   {
     header: "Quick Links",
     links: [
-      { title: "Popular Shows", sublink: "" },
-      { title: "Currently In Theaters", sublink: "" },
-      { title: "Upcoming Releases", sublink: "" },
-      { title: "Top Rated Movies", sublink: "" },
-      { title: "Popular Movies", sublink: "" },
-      { title: "Currently Airing", sublink: "" },
-      { title: "Top Rated Shows", sublink: "" },
-      { title: "Week Trends", sublink: "" },
-      { title: "Airing Today", sublink: "" },
+      { title: "Popular Shows", sublink: "/specialties/tv/popular" },
+      {
+        title: "Currently In Theaters",
+        sublink: "/specialties/movie/now_playing",
+      },
+      { title: "Upcoming Releases", sublink: "/specialties/movie/upcoming" },
+      { title: "Top Rated Movies", sublink: "/specialties/movie/top_rated" },
+      { title: "Popular Movies", sublink: "/specialties/movie/popular" },
+      { title: "Currently Airing", sublink: "/specialties/tv/on_the_air" },
+      { title: "Top Rated Shows", sublink: "/specialties/tv/top_rated" },
+      {
+        title: "Trending This Week",
+        sublink: "/specialties/trending/all/week",
+      },
+      { title: "Airing Today", sublink: "/specialties/tv/airing_today" },
     ],
   },
   {
@@ -199,7 +205,7 @@ export const SIDEBAR_DATA = {
     },
     {
       category: {
-        categoryName: "TV",
+        categoryName: "Shows",
         subCategories: [
           {
             title: "Popular",
@@ -220,6 +226,18 @@ export const SIDEBAR_DATA = {
             title: "Airing Today",
             url: "/specialties/tv/airing_today",
             icon: IconDeviceTv,
+          },
+        ],
+      },
+    },
+    {
+      category: {
+        categoryName: "Trending",
+        subCategories: [
+          {
+            title: "Trending This Week",
+            url: "/specialties/trending/all/week",
+            icon: IconTrendingUp,
           },
         ],
       },
