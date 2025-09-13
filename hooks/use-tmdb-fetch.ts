@@ -1,14 +1,16 @@
 import { useQuery } from "@tanstack/react-query";
 import { getTMDBResource } from "@/api/tmdb-resources";
-import { TMDBApiPaths, TMDBMovieResponse } from "@/lib/types";
+import { TMDBApiPaths, TMDBGroupResourceResponse } from "@/lib/types";
 
 export default function useFetchTMDBResource(
   queryKey: string | number,
-  url: TMDBApiPaths
+  url: TMDBApiPaths,
+  page?: string | number,
+  params?: object
 ) {
-  const { data, isLoading, error } = useQuery<TMDBMovieResponse>({
-    queryKey: [queryKey, url],
-    queryFn: () => getTMDBResource<TMDBMovieResponse>(url),
+  const { data, isLoading, error } = useQuery<TMDBGroupResourceResponse>({
+    queryKey: [queryKey, url, page],
+    queryFn: () => getTMDBResource<TMDBGroupResourceResponse>(url, params),
   });
 
   return {

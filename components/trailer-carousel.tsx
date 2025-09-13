@@ -64,15 +64,21 @@ export default function TrailersCarousel() {
             <CarouselItem key={index} className="w-full p-0">
               <Card className="rounded-none p-0 w-full border-0 outline-0 bg-background">
                 <CardContent className="flex items-center justify-center w-full p-0 relative">
-                  <video
-                    className="w-full h-auto block relative -top-8"
-                    src={trailer.path}
-                    // preload={index !== 0 ? "none" : "auto"}
-                    muted={isMuted}
-                    ref={(video) => {
-                      trailerRefs.current[index] = video;
-                    }}
-                  />
+                  {trailer?.path ? (
+                    <video
+                      className="w-full h-auto block relative -top-8"
+                      src={trailer.path}
+                      muted={isMuted}
+                      ref={(video) => {
+                        trailerRefs.current[index] = video;
+                      }}
+                      key={trailer.path}
+                    />
+                  ) : (
+                    <div className="w-full h-[400px] flex items-center justify-center bg-black text-white">
+                      Missing trailer
+                    </div>
+                  )}
                   <figcaption className="absolute bottom-1/12 lg:bottom-1/6 text-center">
                     <h3 className="text-primary">{trailer.title}</h3>
                     <p className="max-w-xl text-white font-bold">
@@ -85,14 +91,14 @@ export default function TrailersCarousel() {
             </CarouselItem>
           ))}
         </CarouselContent>
-        <CarouselPrevious className="hidden sm:flex bg-primary ml-10 text-background border-0 sm:size-10 hover:bg-primary/50 hover:text-white hover:scale-105 z-50 left-0" />
-        <CarouselNext className="hidden sm:flex bg-primary text-background mr-10 border-0 sm:size-10 hover:bg-primary/50 hover:text-white hover:scale-105 z-50 right-0" />
+        <CarouselPrevious className="hidden sm:flex bg-primary! ml-10 border-0 sm:size-10 hover:bg-primary/50 hover:text-white hover:scale-105 z-50 left-0" />
+        <CarouselNext className="hidden sm:flex bg-primary! mr-10 border-0 sm:size-10 hover:bg-primary/50 hover:text-white hover:scale-105 z-50 right-0" />
         <Button
           size={"icon"}
           onClick={() => {
             setIsMuted(!isMuted);
           }}
-          className="absolute size-8 sm:size-10 rounded-full bottom-1/6 right-0 mr-10 bg-transparent border-primary border backdrop-blur-2xl focus:ring-0 focus-visible:ring-0 focus-within:ring-0"
+          className="absolute text-white size-8 sm:size-10 rounded-full bottom-1/6 right-0 mr-10 bg-transparent border-primary border backdrop-blur-2xl focus:ring-0 focus-visible:ring-0 focus-within:ring-0"
         >
           {isMuted ? <VolumeOff /> : <Volume2 />}
         </Button>

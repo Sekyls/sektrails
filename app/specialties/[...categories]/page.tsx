@@ -2,7 +2,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useParams, usePathname } from "next/navigation";
 import useFetchTMDBResource from "@/hooks/use-tmdb-fetch";
-import { TMDBApiPaths } from "@/lib/types";
+import { TMDBApiPaths, TMDBGroupResourceListItem } from "@/lib/types";
 import { MovieCard } from "@/components/movie-section";
 import { Loader2Icon } from "lucide-react";
 
@@ -23,7 +23,9 @@ export default function CategoriesPage() {
 
   const { resource, isLoading, totalPages } = useFetchTMDBResource(
     queryKey,
-    `${resourceUrl}?page=${page}` as TMDBApiPaths
+    resourceUrl,
+    page,
+    { page: page }
   );
 
   useEffect(() => {
@@ -58,20 +60,23 @@ export default function CategoriesPage() {
   return (
     <>
       <section className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-5 gap-y-10 gap-x-5 m-10">
-        {allMovies.map((movie, index) => (
+        {allMovies.map((movie: TMDBGroupResourceListItem, index) => (
           <MovieCard
+            resourceID={movie.id}
+            mediaType={
+              movie.media_type ? movie.media_type : movie.title ? "movie" : "tv"
+            }
+            title={movie.title || movie.name || ""}
             image={
               movie.poster_path
                 ? "https://image.tmdb.org/t/p/original" + movie.poster_path
                 : "/fallback.jpg"
             }
-            imgAlt={movie.title || movie.name}
-            title={movie.title || movie.name}
+            imgAlt={movie.title || movie.name || ""}
             key={index}
           />
         ))}
       </section>
-
       <div ref={loadMoreRef} className="h-12 flex items-center justify-center">
         {isLoading && <Loader2Icon className="animate-spin text-primary" />}
         {page >= (totalPages || 999) && <p className="text-primary">Loading</p>}

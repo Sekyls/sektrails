@@ -10,8 +10,10 @@ import { cn } from "@/lib/utils";
 import { ThemeToggle } from "./theme-toggler";
 import { useState } from "react";
 import { MobileToggleProps } from "@/lib/types";
+import { useRouter } from "next/navigation";
 
 const NavigationDesktop = ({ isOpen, setIsOpen }: MobileToggleProps) => {
+  const router = useRouter();
   return (
     <section className="flex justify-between p-5 gap-x-10 items-center md:grid grid-cols-3 md:justify-start md:gap-x-0 z-50">
       <div>
@@ -22,7 +24,7 @@ const NavigationDesktop = ({ isOpen, setIsOpen }: MobileToggleProps) => {
             width={150}
             height={103}
             alt="Sekflix logo"
-            className="mx-auto scale-70 sm:scale-100"
+            className="mx-auto scale-70 sm:scale-100 "
           />
         </Link>
       </div>
@@ -35,8 +37,15 @@ const NavigationDesktop = ({ isOpen, setIsOpen }: MobileToggleProps) => {
       </div>
       <div className="flex justify-center gap-x-5 items-center">
         <div className="hidden md:flex justify-center gap-x-5 items-center">
-          <Button>Sign Up</Button>
-          <Button>Log In</Button>
+          <Button
+            className="dark:text-white hover:scale-105 hover:bg-primary/70"
+            size={"lg"}
+            onClick={() => {
+              router.replace("/auth/login");
+            }}
+          >
+            Log In
+          </Button>
           <Avatar>
             <AvatarImage src="https://github.com/shadcn.png" />
             <AvatarFallback></AvatarFallback>
@@ -75,12 +84,7 @@ const NavigationMobile = ({ isOpen }: MobileToggleProps) => {
         />
         <CommandSeparator />
         <div className="space-y-2 text-primary">
-          <Link href={""} className="p-0 flex gap-1 items-center">
-            <span className="text-foreground"> Sign Up</span>{" "}
-            <UserRoundPlus size={18} />
-          </Link>
-          <CommandSeparator />
-          <Link href={""} className="p-0 flex gap-1 items-center">
+          <Link href={"/auth/login"} className="p-0 flex gap-1 items-center">
             Log In
             <LogIn size={18} className="text-foreground" />
           </Link>

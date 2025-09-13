@@ -15,13 +15,25 @@ import WidthConstraint from "./ui/width-constraint";
 import useFetchTMDBResource from "../hooks/use-tmdb-fetch";
 import { MovieCardProps, MovieSectionsProps } from "@/lib/types";
 import { cn } from "@/lib/utils";
+import { useRouter } from "next/navigation";
 
-export function MovieCard({ image, imgAlt, title }: MovieCardProps) {
+export function MovieCard({
+  image,
+  imgAlt,
+  title,
+  mediaType,
+  resourceID,
+}: MovieCardProps) {
+  const router = useRouter();
+
   return (
     <Card
       className={cn(
-        "max-w-2xs pt-3 pb-3 px-2 rounded-3xl gap-2 bg-primary text-white border-0 outline-0 font-medium hover:scale-95 dark:hover:scale-100 dark:hover:animate-pulse  transition-all duration-500 ease-in-out"
+        "max-w-2xs max-h-[465px] overflow-hidden p-1.5 rounded-3xl gap-2 bg-primary text-white border-0 outline-0 font-medium hover: dark:hover:scale-100 dark:hover:animate-pulse  transition-all duration-500 ease-in-out"
       )}
+      onClick={() => {
+        router.push(`/previews/${mediaType}/${resourceID}`);
+      }}
     >
       <CardContent className="p-0">
         <Image
@@ -32,7 +44,7 @@ export function MovieCard({ image, imgAlt, title }: MovieCardProps) {
           height={750}
         />
       </CardContent>
-      <CardFooter className="flex justify-between px-1.5">
+      <CardFooter className="flex justify-between px-3 pb-1">
         <p className="truncate w-50">{title}</p>
         <BookmarkPlus />
       </CardFooter>
@@ -50,11 +62,14 @@ export default function MovieSection({
 
   return (
     <WidthConstraint className="space-y-2">
-      <div className="flex justify-between items-center text-primary font-bold">
-        <h4>{category}</h4>
-        <Link href={seeAllLink || ""} className="flex gap-x-1 items-center">
+      <div className="flex justify-between items-center text-primary font-bold ">
+        <h4 className="hover-underline mb-2">{category}</h4>
+        <Link
+          href={seeAllLink || ""}
+          className="flex gap-x-1 items-center group"
+        >
           <p className="text-3xl"> See all</p>
-          <ArrowRight size={18} />
+          <ArrowRight size={18} className="group-hover:animate-bounce" />
         </Link>
       </div>
       <Carousel>
@@ -66,14 +81,22 @@ export default function MovieSection({
                 key={index}
               >
                 <MovieCard
+                  title={movie.title! || movie.name!}
+                  resourceID={movie.id}
+                  mediaType={
+                    movie.media_type
+                      ? movie.media_type
+                      : movie.title
+                      ? "movie"
+                      : "tv"
+                  }
                   image={
                     movie.poster_path
                       ? "https://image.tmdb.org/t/p/original" +
                         movie.poster_path
                       : "/fallback.jpg"
                   }
-                  imgAlt={movie?.title || movie.name}
-                  title={movie?.title || movie.name}
+                  imgAlt={movie?.title! || movie.name!}
                 />
               </CarouselItem>
             );
