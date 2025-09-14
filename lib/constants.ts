@@ -4,6 +4,7 @@ import {
   IconCalendar,
   IconDeviceTv,
   IconHelp,
+  IconLogout,
   IconMovie,
   IconPlayerPlay,
   IconSearch,
@@ -253,11 +254,6 @@ export const SIDEBAR_DATA = {
       title: "Learn More",
       url: "#",
       icon: IconHelp,
-    },
-    {
-      title: "Search",
-      url: "#",
-      icon: IconSearch,
     },
   ],
 };

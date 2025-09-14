@@ -6,8 +6,14 @@ import { Input } from "../ui/input";
 import { Button } from "../ui/button";
 import { ThemeToggle } from "../theme-toggler";
 import { useParams } from "next/navigation";
+import { useAuth } from "@/providers/firebase-auth-provider";
+import { useRouter } from "next/navigation";
+import { cn } from "@/lib/utils";
 
 export function SiteHeader() {
+  const router = useRouter();
+  const { loading, user } = useAuth();
+
   const { categories } = useParams<{
     categories: [resourceType: string, resourcecategory: string];
   }>();
@@ -19,6 +25,7 @@ export function SiteHeader() {
   const pageTitle = title
     .replaceAll("all trendings", "trending this week")
     .toLocaleUpperCase();
+
   return (
     <header className="flex h-(--header-height) shrink-0 items-center gap-2 border-b transition-[width,height] ease-linear group-has-data-[collapsible=icon]/sidebar-wrapper:h-(--header-height) pb-3 pt-1.5">
       <div className="flex w-full items-center gap-1 px-4 lg:gap-2 lg:px-6">
@@ -27,26 +34,44 @@ export function SiteHeader() {
           orientation="vertical"
           className="mx-2 data-[orientation=vertical]:h-4 bg-primary"
         />
-        <h4 className="text-primary font-bold tracking-widest">
+        <h5 className="text-primary font-bold tracking-widest font-dancingScript!">
           {pageTitle || "Sektrails"}
-        </h4>
-        <section className="flex space-x-10 ml-auto max-w-3xl items-center">
-          <div className="max-w-2xl flex justify-center gap-x-2 items-center rounded-sm border border-primary pl-2 text-background">
+        </h5>
+        <section className="flex space-x-5 ml-auto max-w-3xl items-center">
+          <div className="flex justify-center gap-x-2 items-center rounded-sm border border-primary pl-2 text-background w-3xl">
             <Search className="text-primary dark:text-white" />
             <Input
               placeholder="Search for a movie..."
               className="border-transparent focus-visible:border-0 focus-visible:ring-0 placeholder:font-bold placeholder:text-primary/50 dark:placeholder:text-white/50 rounded-sm text-primary"
             />
           </div>
-          <div className="flex justify-center gap-x-5 items-center">
-            <div className="hidden md:flex justify-center gap-x-5 items-center ">
-              <Button className="dark:text-white">Sign Up</Button>
-              <Button className="dark:text-white">Log In</Button>
-            </div>
-            <div className=" flex gap-5 items-center">
-              <ThemeToggle />
-            </div>
-          </div>
+          <Button
+            className={cn(
+              loading || user
+                ? "hidden"
+                : "dark:text-white hover:scale-105 hover:bg-primary/70"
+            )}
+            size={"lg"}
+            onClick={() => {
+              router.replace("/auth/login");
+            }}
+          >
+            Log In
+          </Button>
+          <Button
+            className={cn(
+              !user
+                ? "hidden"
+                : "dark:text-white hover:scale-105 hover:bg-primary/70"
+            )}
+            size={"lg"}
+            onClick={() => {
+              router.replace("");
+            }}
+          >
+            Sign out
+          </Button>
+          <ThemeToggle />
         </section>
       </div>
     </header>
