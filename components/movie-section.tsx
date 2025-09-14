@@ -68,7 +68,7 @@ export default function MovieSection({
           href={seeAllLink || ""}
           className="flex gap-x-1 items-center group"
         >
-          <p className="text-3xl"> See all</p>
+          <p className="text-3xl"> See more</p>
           <ArrowRight size={18} className="group-hover:animate-bounce" />
         </Link>
       </div>

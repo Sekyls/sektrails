@@ -1,6 +1,5 @@
 "use client";
 import { LogIn, Menu, Search, User, UserRoundPlus } from "lucide-react";
-import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import { Button } from "./ui/button";
 import { Input } from "./ui/input";
 import { Command, CommandInput, CommandSeparator } from "./ui/custom-command";
@@ -9,10 +8,12 @@ import Link from "next/link";
 import { cn } from "@/lib/utils";
 import { ThemeToggle } from "./theme-toggler";
 import { useState } from "react";
-import { MobileToggleProps } from "@/lib/types";
+import { MobileToggleProps, NavProps } from "@/lib/types";
 import { useRouter } from "next/navigation";
+import { useAuth } from "@/providers/firebase-auth-provider";
+import UserAvatar from "./user-avatar";
 
-const NavigationDesktop = ({ isOpen, setIsOpen }: MobileToggleProps) => {
+const NavigationDesktop = ({ isOpen, setIsOpen, user, loading }: NavProps) => {
   const router = useRouter();
   return (
     <section className="flex justify-between p-5 gap-x-10 items-center md:grid grid-cols-3 md:justify-start md:gap-x-0 z-50">
@@ -36,9 +37,13 @@ const NavigationDesktop = ({ isOpen, setIsOpen }: MobileToggleProps) => {
         />
       </div>
       <div className="flex justify-center gap-x-5 items-center">
-        <div className="hidden md:flex justify-center gap-x-5 items-center">
+        <div className="flex justify-center gap-x-5 items-center">
           <Button
-            className="dark:text-white hover:scale-105 hover:bg-primary/70"
+            className={cn(
+              loading || user
+                ? "hidden"
+                : "dark:text-white hover:scale-105 hover:bg-primary/70"
+            )}
             size={"lg"}
             onClick={() => {
               router.replace("/auth/login");
@@ -46,10 +51,7 @@ const NavigationDesktop = ({ isOpen, setIsOpen }: MobileToggleProps) => {
           >
             Log In
           </Button>
-          <Avatar>
-            <AvatarImage src="https://github.com/shadcn.png" />
-            <AvatarFallback></AvatarFallback>
-          </Avatar>
+          <UserAvatar user={user} />
         </div>
         <div className=" flex gap-5 items-center">
           <ThemeToggle />
@@ -63,6 +65,14 @@ const NavigationDesktop = ({ isOpen, setIsOpen }: MobileToggleProps) => {
               isOpen === false ? "text-primary" : "text-red-300"
             )}
           />
+          <Button
+            className="text-foreground tracking-wider text-lg rounded-sm hover:bg-primary/50 font-dancingScript"
+            onClick={() => {
+              router.replace("/specialties/movie/popular");
+            }}
+          >
+            Specials
+          </Button>
         </div>
       </div>
     </section>
@@ -88,11 +98,6 @@ const NavigationMobile = ({ isOpen }: MobileToggleProps) => {
             Log In
             <LogIn size={18} className="text-foreground" />
           </Link>
-          <CommandSeparator />
-          <Link href={""} className="p-0 flex items-center gap-1">
-            <span className="text-foreground">Profile</span>
-            <User size={18} className="text-primary" />
-          </Link>
         </div>
       </Command>
     </section>
@@ -100,10 +105,16 @@ const NavigationMobile = ({ isOpen }: MobileToggleProps) => {
 };
 
 export default function NavigationBar() {
+  const { loading, user } = useAuth();
   const [isOpen, setIsOpen] = useState<boolean>(false);
   return (
     <nav className="fixed w-full top-0 navBar z-50">
-      <NavigationDesktop isOpen={isOpen} setIsOpen={setIsOpen} />
+      <NavigationDesktop
+        isOpen={isOpen}
+        setIsOpen={setIsOpen}
+        user={user}
+        loading={loading}
+      />
       <NavigationMobile isOpen={isOpen} setIsOpen={setIsOpen} />
     </nav>
   );

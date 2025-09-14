@@ -138,6 +138,7 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body
+        suppressHydrationWarning
         className={`${inter.className} ${bebasNeue.variable} ${leckerli.variable} ${dancingScript.variable}  antialiased overflow-x-hidden scroll-smooth`}
       >
         <ThemeProvider

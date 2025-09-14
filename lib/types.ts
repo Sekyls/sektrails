@@ -6,6 +6,19 @@ export type MobileToggleProps = {
   setIsOpen: Dispatch<SetStateAction<boolean>>;
 };
 
+export type AvatarUser = {
+  user: {
+    photoURL?: string | null;
+    displayName?: string | null;
+    email: string | null;
+    phoneNumber: string | null;
+    uid: string | null;
+  } | null;
+  loading?: boolean;
+};
+
+export type NavProps = MobileToggleProps & AvatarUser;
+
 export type WidthConstraintProps = {
   className?: string;
   children?: React.ReactNode;
@@ -23,10 +36,9 @@ export enum TMDBApiPaths {
   TvTopRated = "/tv/top_rated",
   TvOnTheAir = "/tv/on_the_air",
   TvAiringToday = "/tv/airing_today",
-  
+
   // Trending
   Trending = "/trending/all/week",
- 
 
   // Discover
   DiscoverMovie = "/discover/movie",
