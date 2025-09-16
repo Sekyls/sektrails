@@ -1,5 +1,5 @@
 "use client";
-import { LogIn, Menu, Search, User, UserRoundPlus } from "lucide-react";
+import { LogIn, Menu, Search } from "lucide-react";
 import { Button } from "./ui/button";
 import { Input } from "./ui/input";
 import { Command, CommandInput, CommandSeparator } from "./ui/custom-command";
@@ -17,18 +17,12 @@ const NavigationDesktop = ({ isOpen, setIsOpen, user, loading }: NavProps) => {
   const router = useRouter();
   return (
     <section className="flex justify-between p-5 gap-x-10 items-center md:grid grid-cols-3 md:justify-start md:gap-x-0 z-50">
-      <div>
-        <Link href={"/"}>
-          {" "}
-          <Image
-            src={"/logos/sektrails.png"}
-            width={150}
-            height={103}
-            alt="Sekflix logo"
-            className="mx-auto scale-70 sm:scale-100 "
-          />
-        </Link>
-      </div>
+      <Link
+        href={"/"}
+        className="font-leckerli text-4xl hover-underline text-primary"
+      >
+        Sektrails
+      </Link>
       <div className="hidden md:flex justify-center gap-x-2 items-center rounded-sm border border-input pl-2 search-input text-background">
         <Search className="text-primary" />
         <Input

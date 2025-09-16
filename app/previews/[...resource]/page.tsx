@@ -11,6 +11,9 @@ import {
 import WidthConstraint from "@/components/ui/width-constraint";
 import useFetchTMDBResourceWithExtras from "@/hooks/use-tmdb-fetch-with-extras";
 import {
+  fetchedReviewData,
+  ReviewFormData,
+  reviewsProps,
   TMDBApiPaths,
   TMDBCreditsResponse,
   TMDBRecommendationsResponse,
@@ -20,7 +23,7 @@ import {
 import { cn } from "@/lib/utils";
 import { Loader2Icon, Share, Star } from "lucide-react";
 import Image from "next/image";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import Footer from "@/components/footer";
 import { useAuth } from "@/providers/firebase-auth-provider";
@@ -58,7 +61,14 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { isValid } from "zod/v3";
+import { toast } from "sonner";
+import { addReview, getReviews } from "@/lib/reviews";
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+} from "@/components/ui/carousel";
+import Autoplay from "embla-carousel-autoplay";
 
 function ResourceData({ meta }: { meta: TMDBResourceWithExtras }) {
   const { user } = useAuth();
@@ -72,10 +82,11 @@ function ResourceData({ meta }: { meta: TMDBResourceWithExtras }) {
                 ? "https://image.tmdb.org/t/p/original" + meta.backdrop_path
                 : "/fallback.jpg"
             }
-            alt={meta.name!}
+            alt={meta.name || "N/A"}
             className="aspect-[16/9] w-full"
             width={1280}
             height={720}
+            priority
           />
           <WidthConstraint className="absolute bottom-1/12 ml-60 space-y-5">
             <h1 className="text-primary font tracking-widest hover-underline">
@@ -158,15 +169,17 @@ function ResourceData({ meta }: { meta: TMDBResourceWithExtras }) {
   );
 }
 
-function ResourceReviews() {
+function ResourceReviews({ mediaType, resourceID }: reviewsProps) {
   const { user } = useAuth();
+  const [reviews, setReviews] = useState<fetchedReviewData[]>([]);
+
   const reviewSchema = z
     .object({
       review: z
         .string()
         .min(4, "Your review must be at least 4 characters long")
         .max(200, "Your review must be at most 500 characters long"),
-      ratings: z.string(),
+      ratings: z.string().min(1, "Please select a rating"),
     })
     .required();
   const reviewForm = useForm<z.infer<typeof reviewSchema>>({
@@ -179,41 +192,111 @@ function ResourceReviews() {
     reValidateMode: "onBlur",
   });
   const { control, handleSubmit, formState } = reviewForm;
-  const { isLoading, isSubmitting, validatingFields, isValid } = formState;
+  const { isLoading, isSubmitting, isValid } = formState;
   function onSubmit(values: z.infer<typeof reviewSchema>) {
     const reviewFormData = {
-      id: user?.uid,
+      mediaType,
+      resourceID,
+      userId: user?.uid,
       name: user?.displayName,
       profileImage: user?.photoURL,
       ...values,
     };
+    toast.promise(
+      (async () => {
+        const result = await addReview(reviewFormData as ReviewFormData);
 
-    console.log(reviewFormData);
+        if (result === false) {
+          throw new Error("Error adding review");
+        }
+        return "Review added succesfully";
+      })(),
+      {
+        loading: "",
+        success: (message) => ({
+          message: "Review addition successful",
+          description: message,
+          action: {
+            label: "Success!",
+            onClick: () => {},
+          },
+          classNames: { actionButton: "bg-green-700! text-white!" },
+        }),
+        error: (err) => ({
+          message: "Review addition failed",
+          description: err.message,
+          action: {
+            label: "Failed!",
+            onClick: () => {},
+          },
+          classNames: { actionButton: "bg-red-700! text-white!" },
+        }),
+      }
+    );
   }
+  useEffect(() => {
+    const unsubscribe = getReviews(
+      mediaType,
+      resourceID.toString(),
+      setReviews
+    );
+
+    return () => unsubscribe();
+  }, [mediaType, resourceID]);
 
   return (
     <section className="text-center">
       <h3 className="font-dancingScript! font-bold pb-2">Movie Reviews</h3>
-      <article>
-        <div className="grid grid-cols-5">
-          <Card className="max-w-sm p-2 space-y-2.5 block rounded-md">
-            <div className="flex items-center gap-x-5">
-              <Avatar>
-                <AvatarImage src="https://github.com/shadcn.png" alt="avatar" />
-                <AvatarFallback>CN</AvatarFallback>
-              </Avatar>
-              <CardTitle className="text-left">
-                {"Dennis Sekyi Opoku"}
-              </CardTitle>
-            </div>
-            <CardDescription className="text-left tracking-wide text-pretty">
-              Lorem ipsum dolor sit amet consectetur adipisicing elit. In
-              molestias asperiores neque ratione et, ducimus recusandae impedit
-              provident sapiente eum, animi maxime hic quia quis ipsum adipisci
-              eligendi, dolor repudiandae.
-            </CardDescription>
-          </Card>
-        </div>
+      <article className="space-y-10">
+        <Carousel
+          opts={{
+            loop: true,
+            align: "start",
+          }}
+          plugins={[
+            Autoplay({
+              delay: 2000,
+            }),
+          ]}
+        >
+          <CarouselContent>
+            {reviews.map((review, index) => {
+              return (
+                <CarouselItem className="basis-1/4" key={index}>
+                  <Card className="max-w-sm p-2 space-y-2.5 block rounded-md">
+                    <div className="flex items-center gap-x-5">
+                      <Avatar>
+                        <AvatarImage src={review.profileImage} alt="avatar" />
+                        <AvatarFallback>{review.name.charAt(0)}</AvatarFallback>
+                      </Avatar>
+                      <CardTitle className="text-left">{review.name}</CardTitle>
+                    </div>
+                    <CardDescription className="text-left tracking-wide text-pretty space-y-1">
+                      <span className="flex gap-x-0.5">
+                        {Array.from(
+                          { length: parseInt(review.ratings) },
+                          (_, index) => {
+                            return (
+                              <Star
+                                key={index}
+                                size={16}
+                                className="text-primary"
+                              />
+                            );
+                          }
+                        )}
+                      </span>
+                      <p>{review.review}</p>
+                    </CardDescription>
+                  </Card>
+                </CarouselItem>
+              );
+            })}
+          </CarouselContent>
+        </Carousel>
+        {reviews.length < 1 && (
+          <h4 className="tracking-widest">NO Reviews Yet</h4>
+        )}
         <Dialog>
           <Form {...reviewForm}>
             <DialogTrigger asChild>
@@ -240,7 +323,7 @@ function ResourceReviews() {
                         <Textarea
                           {...field}
                           placeholder="Type your review here."
-                          className="focus-visible:ring-0 "
+                          className="focus-visible:ring-0"
                         />
                       </FormControl>
                       <FormMessage />
@@ -258,8 +341,9 @@ function ResourceReviews() {
                           onValueChange={field.onChange}
                           value={field.value}
                           defaultValue={field.value}
+                          required
                         >
-                          <SelectTrigger className="w-full">
+                          <SelectTrigger className="w-full focus-visible:ring-0">
                             <SelectValue placeholder="Select a rating" />
                           </SelectTrigger>
                           <SelectContent>
@@ -281,6 +365,7 @@ function ResourceReviews() {
                           </SelectContent>
                         </Select>
                       </FormControl>
+                      <FormMessage />
                     </FormItem>
                   )}
                 />
@@ -323,7 +408,7 @@ function ResourceCasts({ credits }: { credits: TMDBCreditsResponse }) {
                         cast.profile_path
                       : "/fallback.jpg"
                   }
-                  alt={cast.name || ""}
+                  alt={cast.name || "N/A"}
                   className="aspect-[2/3] rounded-2xl"
                   width={500}
                   height={750}
@@ -359,8 +444,8 @@ function SimilarMovies({ similar }: { similar: TMDBSimilarResponse }) {
                   ? "https://image.tmdb.org/t/p/original" + movie.poster_path
                   : "/fallback.jpg"
               }
-              imgAlt={movie.name || movie.title || ""}
-              title={movie.name || movie.title || ""}
+              imgAlt={movie.name || movie.title || "N/A"}
+              title={movie.name || movie.title || "N/A"}
               mediaType={movie.media_type!}
               resourceID={movie.id}
               resource={movie}
@@ -394,8 +479,8 @@ function RecommendedMovies({
                   ? "https://image.tmdb.org/t/p/original" + movie.poster_path
                   : "/fallback.jpg"
               }
-              imgAlt={movie.name || movie.title || ""}
-              title={movie.name || movie.title || ""}
+              imgAlt={movie.name || movie.title || "N/A"}
+              title={movie.name || movie.title || "N/A"}
               mediaType={movie.media_type!}
               resourceID={movie.id}
               resource={movie}
@@ -431,7 +516,10 @@ export default function ResourcePage() {
       <ResourceData meta={meta} />
       <main>
         <WidthConstraint className="space-y-20">
-          <ResourceReviews />
+          <ResourceReviews
+            resourceID={meta.id}
+            mediaType={meta.title ? "movie" : "tv"}
+          />
           <ResourceCasts credits={credits!} />
           <SimilarMovies similar={similar!} />
           <RecommendedMovies recommendations={recommendations!} />

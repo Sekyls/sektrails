@@ -1,59 +1,60 @@
-import { doc, serverTimestamp, setDoc } from "firebase/firestore";
+import { addDoc, onSnapshot, serverTimestamp } from "firebase/firestore";
 import { db } from "@/config/firebase";
-import { User } from "firebase/auth";
-import {
-  collection,
-  getDocs,
-  limit,
-  orderBy,
-  query,
-  startAfter,
-} from "firebase/firestore";
+import { collection, orderBy, query } from "firebase/firestore";
+import { fetchedReviewData, ReviewFormData } from "./types";
 
-export async function addReview(user: User | null, review: "") {
+export async function addReview({
+  resourceID,
+  mediaType,
+  ...data
+}: ReviewFormData) {
   try {
-    if (user === null) {
-      return -1;
+    if (!data) {
+      return;
     }
 
-    if (!review) {
-      return 0;
-    }
+    const reviewsRef = collection(
+      db,
+      "reviews",
+      `${mediaType}_${resourceID}`,
+      "userReviews"
+    );
 
-    const { id, poster_path, name, title } = review;
-    const media_type = title ? "movie" : "tv";
-
-    const ref = doc(db, "users", user.uid, "bookmarks", id.toString());
-
-    await setDoc(ref, {
-      id,
-      title: name ?? title,
-      poster_path,
-      media_type,
+    await addDoc(reviewsRef, {
+      ...data,
       addedAt: serverTimestamp(),
     });
-
     return true;
   } catch (error) {
-    console.error("Error adding bookmark:", error);
-
+    console.error("Error adding review:", error);
     return false;
   }
 }
 
-export async function getPagedReviews(user: User, lastDoc?: any) {
-  const ref = collection(db, "users", user.uid, "bookmarks");
+export function getReviews(
+  mediaType: string,
+  resourceID: string,
+  setReviews: (reviews: fetchedReviewData[]) => void
+) {
+  const reviewsRef = collection(
+    db,
+    "reviews",
+    `${mediaType}_${resourceID}`,
+    "userReviews"
+  );
 
-  let q = query(ref, orderBy("addedAt", "desc"), limit(10));
+  const q = query(reviewsRef, orderBy("addedAt", "desc"));
 
-  if (lastDoc) {
-    q = query(ref, orderBy("addedAt", "desc"), startAfter(lastDoc), limit(10));
-  }
-
-  const snapshot = await getDocs(q);
-
-  return {
-    docs: snapshot.docs.map((doc) => ({ ...doc.data() })),
-    lastDoc: snapshot.docs[snapshot.docs.length - 1],
-  };
+  const unsubscribe = onSnapshot(q, (snapshot) => {
+    const reviews = snapshot.docs.map((doc) => {
+      const data = doc.data();
+      return {
+        id: doc.id,
+        ...data,
+        addedAt: data.addedAt?.toDate?.(),
+      } as fetchedReviewData;
+    });
+    setReviews(reviews);
+  });
+  return unsubscribe;
 }

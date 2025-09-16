@@ -182,3 +182,27 @@ export type TMDBResourceWithExtras = {
   recommendations?: TMDBRecommendationsResponse;
   similar?: TMDBSimilarResponse;
 };
+
+export type ReviewFormData = {
+  name: string;
+  profileImage: string;
+  ratings: string;
+  review: string;
+  mediaType: "movie" | "tv";
+  resourceID: number;
+};
+
+export type reviewsProps = {
+  mediaType: "movie" | "tv";
+  resourceID: number;
+};
+
+export type fetchedReviewData = {
+  id: string;
+  userId: string;
+  name: string;
+  profileImage?: string;
+  review: string;
+  ratings: string;
+  addedAt?: Date;
+};
