@@ -9,7 +9,7 @@ import { useParams } from "next/navigation";
 import { useAuth } from "@/providers/firebase-auth-provider";
 import { useRouter } from "next/navigation";
 import { cn } from "@/lib/utils";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 export function SiteHeader() {
   const router = useRouter();
@@ -19,17 +19,19 @@ export function SiteHeader() {
   const { categories } = useParams<{
     categories: [resourceType: string, resourcecategory: string];
   }>();
-  if (categories) {
-    const title =
-      categories[1].replaceAll("_", " ") +
-      " " +
-      categories[0].replace("tv", "show") +
-      "s";
-    const pageTitle = title
-      .replaceAll("all trendings", "trending this week")
-      .toLocaleUpperCase();
-    setPageTitle(pageTitle);
-  }
+  useEffect(() => {
+    if (categories) {
+      const title =
+        categories[1].replaceAll("_", " ") +
+        " " +
+        categories[0].replace("tv", "show") +
+        "s";
+      const pageTitle = title
+        .replaceAll("all trendings", "trending this week")
+        .toLocaleUpperCase();
+      setPageTitle(pageTitle);
+    }
+  }, [categories]);
 
   return (
     <header className="flex h-(--header-height) shrink-0 items-center gap-2 border-b transition-[width,height] ease-linear group-has-data-[collapsible=icon]/sidebar-wrapper:h-(--header-height) pb-3 pt-1.5">

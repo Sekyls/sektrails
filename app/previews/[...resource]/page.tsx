@@ -18,7 +18,7 @@ import {
   TMDBSimilarResponse,
 } from "@/lib/types";
 import { cn } from "@/lib/utils";
-import { Share, Star } from "lucide-react";
+import { Loader2Icon, Share, Star } from "lucide-react";
 import Image from "next/image";
 import React from "react";
 import { useParams } from "next/navigation";
@@ -37,8 +37,6 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { Label } from "@/components/ui/label";
-import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import {
   Select,
@@ -49,6 +47,18 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { z } from "zod/v4";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+import { isValid } from "zod/v3";
 
 function ResourceData({ meta }: { meta: TMDBResourceWithExtras }) {
   const { user } = useAuth();
@@ -149,6 +159,38 @@ function ResourceData({ meta }: { meta: TMDBResourceWithExtras }) {
 }
 
 function ResourceReviews() {
+  const { user } = useAuth();
+  const reviewSchema = z
+    .object({
+      review: z
+        .string()
+        .min(4, "Your review must be at least 4 characters long")
+        .max(200, "Your review must be at most 500 characters long"),
+      ratings: z.string(),
+    })
+    .required();
+  const reviewForm = useForm<z.infer<typeof reviewSchema>>({
+    resolver: zodResolver(reviewSchema),
+    defaultValues: {
+      review: "",
+      ratings: "",
+    },
+    mode: "onChange",
+    reValidateMode: "onBlur",
+  });
+  const { control, handleSubmit, formState } = reviewForm;
+  const { isLoading, isSubmitting, validatingFields, isValid } = formState;
+  function onSubmit(values: z.infer<typeof reviewSchema>) {
+    const reviewFormData = {
+      id: user?.uid,
+      name: user?.displayName,
+      profileImage: user?.photoURL,
+      ...values,
+    };
+
+    console.log(reviewFormData);
+  }
+
   return (
     <section className="text-center">
       <h3 className="font-dancingScript! font-bold pb-2">Movie Reviews</h3>
@@ -157,7 +199,7 @@ function ResourceReviews() {
           <Card className="max-w-sm p-2 space-y-2.5 block rounded-md">
             <div className="flex items-center gap-x-5">
               <Avatar>
-                <AvatarImage src="https://github.com/shadcn.png" />
+                <AvatarImage src="https://github.com/shadcn.png" alt="avatar" />
                 <AvatarFallback>CN</AvatarFallback>
               </Avatar>
               <CardTitle className="text-left">
@@ -173,76 +215,92 @@ function ResourceReviews() {
           </Card>
         </div>
         <Dialog>
-          <form>
+          <Form {...reviewForm}>
             <DialogTrigger asChild>
               <Button className="text-white py-5 rounded-sm font-bold">
                 Leave a review
               </Button>
             </DialogTrigger>
-            <DialogContent className="sm:max-w-[425px] space-y-1">
-              <DialogHeader>
-                <DialogDescription>
-                  Share your thoughts about this movie. Your review helps others
-                  decide what to watch!
-                </DialogDescription>
-              </DialogHeader>
-              <div className="grid gap-4 space-y-2">
-                <div className="grid gap-3">
-                  <Label htmlFor="username-1">Review</Label>
-                  <Textarea
-                    placeholder="Type your review here."
-                    className="focus-visible:ring-0 "
-                  />
-                </div>
-                <div className="grid gap-3">
-                  <Label htmlFor="name-1">Ratings</Label>
-                  <Select>
-                    <SelectTrigger className="w-full">
-                      <SelectValue placeholder="Select a rating" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectGroup>
-                        <SelectLabel>Ratings</SelectLabel>
-                        <SelectItem value="1">
-                          <Star />
-                        </SelectItem>
-                        <SelectItem value="2">
-                          <Star />
-                          <Star />
-                        </SelectItem>
-                        <SelectItem value="3">
-                          <Star />
-                          <Star />
-                          <Star />
-                        </SelectItem>
-                        <SelectItem value="4">
-                          <Star />
-                          <Star />
-                          <Star />
-                          <Star />
-                        </SelectItem>
-                        <SelectItem value="5">
-                          <Star />
-                          <Star />
-                          <Star />
-                          <Star />
-                          <Star />
-                        </SelectItem>
-                      </SelectGroup>
-                    </SelectContent>
-                  </Select>
-                </div>
-              </div>
-              <DialogFooter>
-                <DialogClose asChild>
-                  <Button variant="outline">Cancel</Button>
-                </DialogClose>
-                <Button type="submit" className="text-white">
-                  Add review
-                </Button>
-              </DialogFooter>
+            <DialogContent className="sm:max-w-[425px]">
+              <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
+                <DialogHeader>
+                  <DialogTitle className="hidden">Add Reviews</DialogTitle>
+                  <DialogDescription>
+                    Share your thoughts on this movie. Your review helps others
+                    decide what to watch!
+                  </DialogDescription>
+                </DialogHeader>
+                <FormField
+                  name="review"
+                  control={control}
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel className="mb-1">Review</FormLabel>
+                      <FormControl>
+                        <Textarea
+                          {...field}
+                          placeholder="Type your review here."
+                          className="focus-visible:ring-0 "
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  name="ratings"
+                  control={control}
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel className="mb-1">Ratings</FormLabel>
+                      <FormControl>
+                        <Select
+                          onValueChange={field.onChange}
+                          value={field.value}
+                          defaultValue={field.value}
+                        >
+                          <SelectTrigger className="w-full">
+                            <SelectValue placeholder="Select a rating" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectGroup>
+                              <SelectLabel>Ratings</SelectLabel>
+                              {Array.from({ length: 5 }, (_, i) => {
+                                const value = (i + 1).toString();
+                                return (
+                                  <SelectItem key={value} value={value}>
+                                    {Array.from({ length: i + 1 }).map(
+                                      (_, j) => (
+                                        <Star key={j} />
+                                      )
+                                    )}
+                                  </SelectItem>
+                                );
+                              })}
+                            </SelectGroup>
+                          </SelectContent>
+                        </Select>
+                      </FormControl>
+                    </FormItem>
+                  )}
+                />
+                <DialogFooter>
+                  <DialogClose asChild>
+                    <Button
+                      type="submit"
+                      disabled={!isValid || isSubmitting || isLoading}
+                      className={cn(
+                        "text-white disabled:cursor-not-allowed disabled:pointer-events-auto disabled:hover:bg-primary"
+                      )}
+                    >
+                      Add review
+                      {isSubmitting && <Loader2Icon className="animate-spin" />}
+                    </Button>
+                  </DialogClose>
+                </DialogFooter>
+              </form>
             </DialogContent>
-          </form>
+          </Form>
         </Dialog>
       </article>
     </section>
@@ -265,7 +323,7 @@ function ResourceCasts({ credits }: { credits: TMDBCreditsResponse }) {
                         cast.profile_path
                       : "/fallback.jpg"
                   }
-                  alt={""}
+                  alt={cast.name || ""}
                   className="aspect-[2/3] rounded-2xl"
                   width={500}
                   height={750}
