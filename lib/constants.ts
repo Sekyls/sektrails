@@ -247,7 +247,7 @@ export const SIDEBAR_DATA = {
   navSecondary: [
     {
       title: "Bookmarks",
-      url: "#",
+      url: "/specialties/bookmarks",
       icon: IconBookmarkFilled,
     },
     {

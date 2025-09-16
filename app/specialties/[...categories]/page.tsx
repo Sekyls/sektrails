@@ -3,10 +3,12 @@ import React, { useState, useEffect, useRef } from "react";
 import { useParams, usePathname } from "next/navigation";
 import useFetchTMDBResource from "@/hooks/use-tmdb-fetch";
 import { TMDBApiPaths, TMDBGroupResourceListItem } from "@/lib/types";
-import { MovieCard } from "@/components/movie-section";
 import { Loader2Icon } from "lucide-react";
+import { useAuth } from "@/providers/firebase-auth-provider";
+import MovieCard from "@/components/resource-card";
 
 export default function CategoriesPage() {
+  const { user } = useAuth();
   const params = useParams();
   const pathname = usePathname();
   const resourceUrl = pathname.split("/specialties")[1] as TMDBApiPaths;
@@ -56,7 +58,6 @@ export default function CategoriesPage() {
       }
     };
   }, [isLoading, page, totalPages]);
-
   return (
     <>
       <section className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-5 gap-y-10 gap-x-5 m-10">
@@ -74,6 +75,8 @@ export default function CategoriesPage() {
             }
             imgAlt={movie.title || movie.name || ""}
             key={index}
+            resource={movie}
+            user={user}
           />
         ))}
       </section>

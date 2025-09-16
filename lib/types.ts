@@ -1,4 +1,5 @@
 import { Icon } from "@tabler/icons-react";
+import { User } from "firebase/auth";
 import { Dispatch, SetStateAction } from "react";
 
 export type MobileToggleProps = {
@@ -48,11 +49,23 @@ export enum TMDBApiPaths {
 
 export type MovieCardProps = {
   resourceID: number;
-  title: string;
-  mediaType: string;
+  title: string | undefined;
+  mediaType: string | undefined;
   image: string;
   imgAlt: string;
+  bookmarked?: boolean;
 };
+
+export type AddBookmark = {
+  className?: string;
+  user: User | null;
+  resource:
+    | TMDBGroupResourceListItem
+    | TMDBResourceWithExtras
+    | TMDBRecommendation;
+};
+
+export type BookmarkResource = MovieCardProps & AddBookmark;
 
 export type MovieSectionsProps = {
   category: string;
@@ -80,7 +93,7 @@ export type TMDBGroupResourceListItem = {
   id: number;
   title?: string;
   name?: string;
-  media_type?: string;
+  media_type?: string | undefined;
   overview: string;
   poster_path: string | null;
   backdrop_path: string | null;

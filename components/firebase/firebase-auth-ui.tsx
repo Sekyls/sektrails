@@ -1,6 +1,8 @@
 "use client";
+import { useEffect } from "react";
 import { auth } from "@/config/firebase";
-import StyledFirebaseAuth from "react-firebaseui/StyledFirebaseAuth";
+import * as firebaseui from "firebaseui";
+import "firebaseui/dist/firebaseui.css";
 import {
   EmailAuthProvider,
   GoogleAuthProvider,
@@ -13,30 +15,41 @@ import { useRouter } from "next/navigation";
 
 export default function FirebaseAuthUI() {
   const router = useRouter();
-  const uiConfig = {
-    signInFlow: "popup",
-    signInOptions: [
-      GoogleAuthProvider.PROVIDER_ID,
-      GithubAuthProvider.PROVIDER_ID,
-      EmailAuthProvider.PROVIDER_ID,
-      TwitterAuthProvider.PROVIDER_ID,
-      PhoneAuthProvider.PROVIDER_ID,
-    ],
-    callbacks: {
-      signInSuccessWithAuthResult: (
-        userCredential: UserCredential,
-        redirectUrl?: string
-      ): boolean => {
-        console.log("User signed in:", userCredential.user);
-        if (redirectUrl) {
-          router.replace(redirectUrl);
-        } else {
-          router.replace("/");
-        }
-        return false;
-      },
-    },
-  };
 
-  return <StyledFirebaseAuth uiConfig={uiConfig} firebaseAuth={auth} />;
+  useEffect(() => {
+    const ui =
+      firebaseui.auth.AuthUI.getInstance() || new firebaseui.auth.AuthUI(auth);
+
+    ui.start("#firebaseui-auth-container", {
+      signInFlow: "popup",
+      signInOptions: [
+        GoogleAuthProvider.PROVIDER_ID,
+        GithubAuthProvider.PROVIDER_ID,
+        EmailAuthProvider.PROVIDER_ID,
+        TwitterAuthProvider.PROVIDER_ID,
+        PhoneAuthProvider.PROVIDER_ID,
+      ],
+      callbacks: {
+        signInSuccessWithAuthResult: (
+          userCredential: UserCredential,
+          redirectUrl?: string
+        ) => {
+          console.log("User signed in:", userCredential.user);
+
+          if (redirectUrl) {
+            router.replace(redirectUrl);
+          } else {
+            router.replace("/");
+          }
+          return false;
+        },
+      },
+    });
+
+    return () => {
+      ui.reset();
+    };
+  }, [router]);
+
+  return <div id="firebaseui-auth-container" />;
 }

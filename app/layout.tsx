@@ -10,6 +10,7 @@ import "firebaseui/dist/firebaseui.css";
 import TanstackQueryProvider from "@/providers/tanstack-query-provider";
 import { ThemeProvider } from "@/providers/theme-provider";
 import { FirebaseAuthProvider } from "@/providers/firebase-auth-provider";
+import { Toaster } from "@/components/ui/sonner";
 
 const leckerli = Leckerli_One({
   variable: "--font-leckerli",
@@ -150,6 +151,7 @@ export default function RootLayout({
           <FirebaseAuthProvider>
             <TanstackQueryProvider>{children}</TanstackQueryProvider>
           </FirebaseAuthProvider>
+          <Toaster />
         </ThemeProvider>
       </body>
     </html>

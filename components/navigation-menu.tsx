@@ -46,7 +46,7 @@ const NavigationDesktop = ({ isOpen, setIsOpen, user, loading }: NavProps) => {
             )}
             size={"lg"}
             onClick={() => {
-              router.replace("/auth/login");
+              router.push("/auth/login");
             }}
           >
             Log In

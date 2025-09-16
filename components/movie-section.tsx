@@ -1,8 +1,6 @@
 "use client";
 import React from "react";
-import { Card, CardContent, CardFooter } from "@/components/ui/card";
-import Image from "next/image";
-import { ArrowRight, BookmarkPlus } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import {
   Carousel,
   CarouselContent,
@@ -13,44 +11,9 @@ import {
 import Link from "next/link";
 import WidthConstraint from "./ui/width-constraint";
 import useFetchTMDBResource from "../hooks/use-tmdb-fetch";
-import { MovieCardProps, MovieSectionsProps } from "@/lib/types";
-import { cn } from "@/lib/utils";
-import { useRouter } from "next/navigation";
-
-export function MovieCard({
-  image,
-  imgAlt,
-  title,
-  mediaType,
-  resourceID,
-}: MovieCardProps) {
-  const router = useRouter();
-
-  return (
-    <Card
-      className={cn(
-        "max-w-2xs max-h-[465px] overflow-hidden p-1.5 rounded-3xl gap-2 bg-primary text-white border-0 outline-0 font-medium hover: dark:hover:scale-100 dark:hover:animate-pulse  transition-all duration-500 ease-in-out"
-      )}
-      onClick={() => {
-        router.push(`/previews/${mediaType}/${resourceID}`);
-      }}
-    >
-      <CardContent className="p-0">
-        <Image
-          src={image}
-          alt={imgAlt}
-          className="rounded-2xl aspect-[2/3]"
-          width={500}
-          height={750}
-        />
-      </CardContent>
-      <CardFooter className="flex justify-between px-3 pb-1">
-        <p className="truncate w-50">{title}</p>
-        <BookmarkPlus />
-      </CardFooter>
-    </Card>
-  );
-}
+import { MovieSectionsProps } from "@/lib/types";
+import { useAuth } from "@/providers/firebase-auth-provider";
+import MovieCard from "./resource-card";
 
 export default function MovieSection({
   category,
@@ -59,6 +22,7 @@ export default function MovieSection({
   url,
 }: MovieSectionsProps) {
   const { resource } = useFetchTMDBResource(queryKey, url);
+  const { user } = useAuth();
 
   return (
     <WidthConstraint className="space-y-2">
@@ -97,6 +61,8 @@ export default function MovieSection({
                       : "/fallback.jpg"
                   }
                   imgAlt={movie?.title! || movie.name!}
+                  resource={movie}
+                  user={user}
                 />
               </CarouselItem>
             );

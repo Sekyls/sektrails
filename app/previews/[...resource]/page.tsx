@@ -1,8 +1,13 @@
 "use client";
-import { MovieCard } from "@/components/movie-section";
 import NavigationBar from "@/components/navigation-menu";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardFooter } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardTitle,
+} from "@/components/ui/card";
 import WidthConstraint from "@/components/ui/width-constraint";
 import useFetchTMDBResourceWithExtras from "@/hooks/use-tmdb-fetch-with-extras";
 import {
@@ -13,13 +18,40 @@ import {
   TMDBSimilarResponse,
 } from "@/lib/types";
 import { cn } from "@/lib/utils";
-import { BookmarkPlus, Share } from "lucide-react";
+import { Share, Star } from "lucide-react";
 import Image from "next/image";
 import React from "react";
 import { useParams } from "next/navigation";
 import Footer from "@/components/footer";
+import { useAuth } from "@/providers/firebase-auth-provider";
+import Bookmark from "@/components/add-bookmark";
+import MovieCard from "@/components/resource-card";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import {
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import { Label } from "@/components/ui/label";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 function ResourceData({ meta }: { meta: TMDBResourceWithExtras }) {
+  const { user } = useAuth();
   return (
     <section className="mb-20">
       <Card className={cn("p-0")}>
@@ -95,15 +127,9 @@ function ResourceData({ meta }: { meta: TMDBResourceWithExtras }) {
                 </div>
               </div>
               <div className="flex gap-x-5 items-center justify-end">
-                <Button
-                  size={"lg"}
-                  className="text-base font-semibold py-6 px-3 rounded-sm"
-                >
-                  Leave a review
-                </Button>
                 <div className="flex gap-x-1 text-primary font-semibold items-center justify-center">
                   <p className="text-foreground">Bookmark</p>
-                  <BookmarkPlus />
+                  <Bookmark resource={meta} user={user} />
                 </div>
                 <div className="flex gap-x-1 text-primary font-semibold items-center justify-center">
                   <p className="text-foreground">Share</p>
@@ -126,15 +152,99 @@ function ResourceReviews() {
   return (
     <section className="text-center">
       <h3 className="font-dancingScript! font-bold pb-2">Movie Reviews</h3>
-      <div className="w-full bg-primary/80 min-h-140 rounded-md flex flex-col items-center justify-center space-y-10">
-        <div className="text-white text-3xl">{"No Reviews Yet"}</div>
-        <Button
-          size={"lg"}
-          className="py-6 font-black bg-background text-primary hover:bg-background/60"
-        >
-          Leave a review
-        </Button>
-      </div>
+      <article>
+        <div className="grid grid-cols-5">
+          <Card className="max-w-sm p-2 space-y-2.5 block rounded-md">
+            <div className="flex items-center gap-x-5">
+              <Avatar>
+                <AvatarImage src="https://github.com/shadcn.png" />
+                <AvatarFallback>CN</AvatarFallback>
+              </Avatar>
+              <CardTitle className="text-left">
+                {"Dennis Sekyi Opoku"}
+              </CardTitle>
+            </div>
+            <CardDescription className="text-left tracking-wide text-pretty">
+              Lorem ipsum dolor sit amet consectetur adipisicing elit. In
+              molestias asperiores neque ratione et, ducimus recusandae impedit
+              provident sapiente eum, animi maxime hic quia quis ipsum adipisci
+              eligendi, dolor repudiandae.
+            </CardDescription>
+          </Card>
+        </div>
+        <Dialog>
+          <form>
+            <DialogTrigger asChild>
+              <Button className="text-white py-5 rounded-sm font-bold">
+                Leave a review
+              </Button>
+            </DialogTrigger>
+            <DialogContent className="sm:max-w-[425px] space-y-1">
+              <DialogHeader>
+                <DialogDescription>
+                  Share your thoughts about this movie. Your review helps others
+                  decide what to watch!
+                </DialogDescription>
+              </DialogHeader>
+              <div className="grid gap-4 space-y-2">
+                <div className="grid gap-3">
+                  <Label htmlFor="username-1">Review</Label>
+                  <Textarea
+                    placeholder="Type your review here."
+                    className="focus-visible:ring-0 "
+                  />
+                </div>
+                <div className="grid gap-3">
+                  <Label htmlFor="name-1">Ratings</Label>
+                  <Select>
+                    <SelectTrigger className="w-full">
+                      <SelectValue placeholder="Select a rating" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectGroup>
+                        <SelectLabel>Ratings</SelectLabel>
+                        <SelectItem value="1">
+                          <Star />
+                        </SelectItem>
+                        <SelectItem value="2">
+                          <Star />
+                          <Star />
+                        </SelectItem>
+                        <SelectItem value="3">
+                          <Star />
+                          <Star />
+                          <Star />
+                        </SelectItem>
+                        <SelectItem value="4">
+                          <Star />
+                          <Star />
+                          <Star />
+                          <Star />
+                        </SelectItem>
+                        <SelectItem value="5">
+                          <Star />
+                          <Star />
+                          <Star />
+                          <Star />
+                          <Star />
+                        </SelectItem>
+                      </SelectGroup>
+                    </SelectContent>
+                  </Select>
+                </div>
+              </div>
+              <DialogFooter>
+                <DialogClose asChild>
+                  <Button variant="outline">Cancel</Button>
+                </DialogClose>
+                <Button type="submit" className="text-white">
+                  Add review
+                </Button>
+              </DialogFooter>
+            </DialogContent>
+          </form>
+        </Dialog>
+      </article>
     </section>
   );
 }
@@ -175,6 +285,7 @@ function ResourceCasts({ credits }: { credits: TMDBCreditsResponse }) {
 }
 
 function SimilarMovies({ similar }: { similar: TMDBSimilarResponse }) {
+  const { user } = useAuth();
   return (
     <section>
       <h3 className="font-dancingScript! font-bold pb-2 text-center">
@@ -194,6 +305,8 @@ function SimilarMovies({ similar }: { similar: TMDBSimilarResponse }) {
               title={movie.name || movie.title || ""}
               mediaType={movie.media_type!}
               resourceID={movie.id}
+              resource={movie}
+              user={user}
             />
           );
         })}
@@ -207,6 +320,7 @@ function RecommendedMovies({
 }: {
   recommendations: TMDBRecommendationsResponse;
 }) {
+  const { user } = useAuth();
   return (
     <section>
       <h3 className="font-dancingScript! font-bold pb-2 text-center">
@@ -226,6 +340,8 @@ function RecommendedMovies({
               title={movie.name || movie.title || ""}
               mediaType={movie.media_type!}
               resourceID={movie.id}
+              resource={movie}
+              user={user}
             />
           );
         })}
