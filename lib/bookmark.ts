@@ -1,3 +1,4 @@
+"use client";
 import {
   doc,
   DocumentData,
@@ -76,4 +77,3 @@ export async function getPagedBookmarks(
     lastDoc: snapshot.docs[snapshot.docs.length - 1] ?? null,
   };
 }
-
