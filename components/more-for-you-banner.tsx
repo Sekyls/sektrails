@@ -10,14 +10,16 @@ import { Card, CardContent, CardFooter } from "./ui/card";
 import Image from "next/image";
 import { useQuery } from "@tanstack/react-query";
 import { getTMDBResource } from "@/api/tmdb-resources";
-import { TMDBApiPaths, TMDBMovieResponse } from "@/lib/types";
+import { TMDBApiPaths, TMDBGroupResourceResponse } from "@/lib/types";
 import Autoplay from "embla-carousel-autoplay";
 
 export default function MoreForYou() {
-  const { data } = useQuery<TMDBMovieResponse>({
+  const { data } = useQuery<TMDBGroupResourceResponse>({
     queryKey: ["more-for-you"],
     queryFn: () =>
-      getTMDBResource<TMDBMovieResponse>(TMDBApiPaths.DiscoverMovie2025),
+      getTMDBResource<TMDBGroupResourceResponse>(
+        TMDBApiPaths.DiscoverMovie2025
+      ),
   });
 
   let MovieCategoryList;
@@ -51,7 +53,7 @@ export default function MoreForYou() {
                       "https://image.tmdb.org/t/p/original" +
                       movie.backdrop_path
                     }
-                    alt={movie.title || movie.name}
+                    alt={movie.title ?? movie.name ?? "Unknown"}
                     className="w-full rounded-2xl h-150"
                   />
                 </CardContent>
