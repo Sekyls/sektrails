@@ -1,5 +1,10 @@
-import FirebaseAuthUI from "@/components/firebase/firebase-auth-ui";
+import dynamic from "next/dynamic";
 import React from "react";
+
+const FirebaseAuthUI = dynamic(
+  () => import("@/components/firebase/firebase-auth-ui"),
+  { ssr: false }
+);
 
 export default function AuthenticationPage() {
   return (
