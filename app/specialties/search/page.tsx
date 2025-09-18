@@ -11,7 +11,7 @@ export default function SearchPage() {
   const { user } = useAuth();
   const searchParams = useSearchParams();
   const [page, setPage] = useState(1);
-  const [allMovies, setAllMovies] = useState<any[]>([]);
+  const [allMovies, setAllMovies] = useState<TMDBGroupResourceListItem[]>([]);
   const search = searchParams.get("query");
   const resourceUrl = `search/multi?query=${search}` as TMDBApiPaths;
 

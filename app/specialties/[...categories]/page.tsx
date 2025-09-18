@@ -17,7 +17,7 @@ export default function CategoriesPage() {
   const queryKey = refparam?.[1];
 
   const [page, setPage] = useState(1);
-  const [allMovies, setAllMovies] = useState<any[]>([]);
+  const [allMovies, setAllMovies] = useState<TMDBGroupResourceListItem[]>([]);
 
   const { resource, isLoading, totalPages } = useFetchTMDBResource(
     queryKey,
@@ -34,7 +34,7 @@ export default function CategoriesPage() {
 
   const loadMoreRef = useRef<HTMLDivElement | null>(null);
   useEffect(() => {
-    const node = loadMoreRef.current; // cache ref value
+    const node = loadMoreRef.current;
     if (!node) return;
 
     const observer = new IntersectionObserver(
