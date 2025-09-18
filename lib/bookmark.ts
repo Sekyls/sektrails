@@ -1,5 +1,6 @@
 import {
   doc,
+  DocumentData,
   QueryDocumentSnapshot,
   serverTimestamp,
   setDoc,
@@ -59,10 +60,9 @@ export async function addBookmark(
 
 export async function getPagedBookmarks(
   user: User,
-  lastDoc?: QueryDocumentSnapshot<TMDBGroupResourceListItem>
+  lastDoc?: QueryDocumentSnapshot<DocumentData>
 ) {
   const ref = collection(db, "users", user.uid, "bookmarks");
-
   let q = query(ref, orderBy("addedAt", "desc"), limit(10));
 
   if (lastDoc) {
@@ -72,7 +72,8 @@ export async function getPagedBookmarks(
   const snapshot = await getDocs(q);
 
   return {
-    docs: snapshot.docs.map((doc) => ({ ...doc.data() })),
-    lastDoc: snapshot.docs[snapshot.docs.length - 1],
+    docs: snapshot.docs.map((doc) => doc.data() as TMDBGroupResourceListItem),
+    lastDoc: snapshot.docs[snapshot.docs.length - 1] ?? null,
   };
 }
+
