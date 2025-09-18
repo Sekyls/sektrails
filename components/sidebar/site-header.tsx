@@ -5,33 +5,24 @@ import { Search } from "lucide-react";
 import { Input } from "../ui/input";
 import { Button } from "../ui/button";
 import { ThemeToggle } from "../theme-toggler";
-import { useParams } from "next/navigation";
+import { useParams, usePathname } from "next/navigation";
 import { useAuth } from "@/providers/firebase-auth-provider";
 import { useRouter } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { useEffect, useState } from "react";
+import { getPageTitle } from "@/lib/page-title";
 
 export function SiteHeader() {
   const router = useRouter();
   const { loading, user } = useAuth();
-  const [pageTitle, setPageTitle] = useState<string>("Bookmarks");
+  const pathname = usePathname();
+  const [pageTitle, setPageTitle] = useState<string>();
+  const [search, setSearch] = useState<string>();
 
-  const { categories } = useParams<{
-    categories: [resourceType: string, resourcecategory: string];
-  }>();
   useEffect(() => {
-    if (categories) {
-      const title =
-        categories[1].replaceAll("_", " ") +
-        " " +
-        categories[0].replace("tv", "show") +
-        "s";
-      const pageTitle = title
-        .replaceAll("all trendings", "trending this week")
-        .toLocaleUpperCase();
-      setPageTitle(pageTitle);
-    }
-  }, [categories]);
+    const pageTitle = getPageTitle(pathname);
+    setPageTitle(pageTitle.toLocaleUpperCase());
+  }, [pathname]);
 
   return (
     <header className="flex h-(--header-height) shrink-0 items-center gap-2 border-b transition-[width,height] ease-linear group-has-data-[collapsible=icon]/sidebar-wrapper:h-(--header-height) pb-3 pt-1.5">
@@ -45,13 +36,31 @@ export function SiteHeader() {
           {pageTitle}
         </h5>
         <section className="flex space-x-5 ml-auto max-w-3xl items-center">
-          <div className="flex justify-center gap-x-2 items-center rounded-sm border border-primary pl-2 text-background w-3xl">
-            <Search className="text-primary dark:text-white" />
+          <form
+            onSubmit={(e) => {
+              e.preventDefault();
+              router.push(`/specialties/search?query=${search}`);
+            }}
+            className="flex justify-center gap-x-2 items-center rounded-sm border border-primary pl-2 text-background w-3xl"
+          >
+            <Search
+              onClick={(e) => {
+                e.preventDefault();
+                router.push(`/specialties/search?query=${search}`);
+              }}
+              type="submit"
+              className="text-primary dark:text-white hover:fill-primary!"
+            />
             <Input
+              value={search}
+              onChange={(e) => {
+                setSearch(e.target.value);
+              }}
+              autoComplete="on"
               placeholder="Search for a movie..."
               className="border-transparent focus-visible:border-0 focus-visible:ring-0 placeholder:font-bold placeholder:text-primary/50 dark:placeholder:text-white/50 rounded-sm text-primary"
             />
-          </div>
+          </form>
           <Button
             className={cn(
               loading || user

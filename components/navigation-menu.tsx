@@ -3,7 +3,6 @@ import { LogIn, Menu, Search } from "lucide-react";
 import { Button } from "./ui/button";
 import { Input } from "./ui/input";
 import { Command, CommandInput, CommandSeparator } from "./ui/custom-command";
-import Image from "next/image";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
 import { ThemeToggle } from "./theme-toggler";
@@ -15,6 +14,8 @@ import UserAvatar from "./user-avatar";
 
 const NavigationDesktop = ({ isOpen, setIsOpen, user, loading }: NavProps) => {
   const router = useRouter();
+  const [search, setSearch] = useState<string>();
+
   return (
     <section className="flex justify-between p-5 gap-x-10 items-center md:grid grid-cols-3 md:justify-start md:gap-x-0 z-50">
       <Link
@@ -23,13 +24,31 @@ const NavigationDesktop = ({ isOpen, setIsOpen, user, loading }: NavProps) => {
       >
         Sektrails
       </Link>
-      <div className="hidden md:flex justify-center gap-x-2 items-center rounded-sm border border-input pl-2 search-input text-background">
-        <Search className="text-primary" />
+      <form
+        onSubmit={(e) => {
+          e.preventDefault();
+          router.push(`/specialties/search?query=${search}`);
+        }}
+        className="hidden md:flex justify-center gap-x-2 items-center rounded-sm border border-input pl-2 search-input text-background"
+      >
+        <Search
+          className="text-primary hover:text-green-500"
+          type="submit"
+          onClick={(e) => {
+            e.preventDefault();
+            router.push(`/specialties/search?query=${search}`);
+          }}
+        />
         <Input
           placeholder="Search for a movie..."
           className="border-transparent focus-visible:border-0 focus-visible:ring-0 placeholder:font-bold placeholder:text-foreground rounded-sm text-primary"
+          value={search}
+          onChange={(e) => {
+            setSearch(e.target.value);
+          }}
+          autoComplete="on"
         />
-      </div>
+      </form>
       <div className="flex justify-center gap-x-5 items-center">
         <div className="flex justify-center gap-x-5 items-center">
           <Button

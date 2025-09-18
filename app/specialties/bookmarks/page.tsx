@@ -70,7 +70,7 @@ export default function BookmarksPage() {
     };
   }, [user, lastDoc, isFetchingMore]);
 
-  return (
+  return user ? (
     <>
       <section className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-5 gap-y-10 gap-x-5 m-10">
         {docs.map((movie: TMDBGroupResourceListItem, index) => (
@@ -91,7 +91,6 @@ export default function BookmarksPage() {
           />
         ))}
       </section>
-
       <div ref={loaderRef} className="h-12 flex items-center justify-center">
         {isLoading && <Loader2Icon className="animate-spin text-primary" />}
         {isFetchingMore && <p className="text-primary">Loading more…</p>}
@@ -100,5 +99,9 @@ export default function BookmarksPage() {
         )}
       </div>
     </>
+  ) : (
+    <p className="flex justify-center items-center h-full font-black text-lg! w-full">
+      Log in to view Bookmarks
+    </p>
   );
 }

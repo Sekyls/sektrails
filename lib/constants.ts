@@ -251,9 +251,9 @@ export const SIDEBAR_DATA = {
       icon: IconBookmarkFilled,
     },
     {
-      title: "Learn More",
-      url: "#",
-      icon: IconHelp,
+      title: "Search",
+      url: "/specialties/search",
+      icon: IconSearch,
     },
   ],
 };
