@@ -1,4 +1,3 @@
-"use client";
 import { Icon } from "@tabler/icons-react";
 import { User } from "firebase/auth";
 import { Dispatch, SetStateAction } from "react";

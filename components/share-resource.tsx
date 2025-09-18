@@ -11,11 +11,13 @@ export default function ShareResource({
   poster_path,
   title,
 }: ShareResourceProps) {
-  const resourceUrl = window.location.href;
   const [shareFile, setShareFile] = useState<ShareFileProps>();
   const [imageFile, setImageFile] = useState<File>();
+  const [resourceUrl, setResourceUrl] = useState("");
 
   useEffect(() => {
+    setResourceUrl(window.location.href);
+
     (async () => {
       try {
         if (!poster_path) {
