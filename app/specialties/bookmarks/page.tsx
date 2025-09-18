@@ -6,10 +6,12 @@ import MovieCard from "@/components/resource-card";
 import { getPagedBookmarks } from "@/lib/bookmark";
 import { useEffect, useRef, useState } from "react";
 import { TMDBGroupResourceListItem } from "@/lib/types";
+import { DocumentData, QueryDocumentSnapshot } from "firebase/firestore";
 
 export default function BookmarksPage() {
-  const [docs, setDocs] = useState<any[]>([]);
-  const [lastDoc, setLastDoc] = useState<any | null>(null);
+  const [docs, setDocs] = useState<TMDBGroupResourceListItem[]>([]);
+  const [lastDoc, setLastDoc] =
+    useState<QueryDocumentSnapshot<DocumentData> | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [isFetchingMore, setIsFetchingMore] = useState<boolean>(false);
 
@@ -25,7 +27,7 @@ export default function BookmarksPage() {
           user
         );
 
-        setDocs(newDocs);
+        setDocs(newDocs as TMDBGroupResourceListItem[]);
         setLastDoc(newLastDoc);
       } catch (err) {
         console.error("Error fetching bookmarks:", err);
@@ -36,38 +38,35 @@ export default function BookmarksPage() {
   }, [user]);
 
   useEffect(() => {
-    if (!loaderRef.current || !user || !lastDoc) return;
+    const node = loaderRef.current;
+    if (!node || !user || !lastDoc) return;
 
     const observer = new IntersectionObserver(
       async (entries) => {
         if (entries[0].isIntersecting && !isFetchingMore) {
           setIsFetchingMore(true);
-
           try {
             const { docs: newDocs, lastDoc: newLastDoc } =
               await getPagedBookmarks(user, lastDoc);
-
             if (newDocs.length > 0) {
-              setDocs((prev) => [...prev, ...newDocs]);
+              setDocs((prev) => [
+                ...prev,
+                ...(newDocs as TMDBGroupResourceListItem[]),
+              ]);
               setLastDoc(newLastDoc);
             } else {
               setLastDoc(null);
             }
-          } catch (err) {
-            console.error("Error fetching more bookmarks:", err);
           } finally {
             setIsFetchingMore(false);
           }
         }
       },
-      { threshold: 1.0 }
+      { threshold: 1 }
     );
 
-    observer.observe(loaderRef.current);
-
-    return () => {
-      if (loaderRef.current) observer.unobserve(loaderRef.current);
-    };
+    observer.observe(node);
+    return () => observer.unobserve(node);
   }, [user, lastDoc, isFetchingMore]);
 
   return user ? (

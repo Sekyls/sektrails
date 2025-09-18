@@ -14,11 +14,7 @@ export default function CategoriesPage() {
   const resourceUrl = pathname.split("/specialties")[1] as TMDBApiPaths;
   const refparam = params["categories"];
 
-  if (!refparam || !resourceUrl) {
-    return null;
-  }
-
-  const queryKey = refparam[1];
+  const queryKey = refparam?.[1];
 
   const [page, setPage] = useState(1);
   const [allMovies, setAllMovies] = useState<any[]>([]);
@@ -38,7 +34,8 @@ export default function CategoriesPage() {
 
   const loadMoreRef = useRef<HTMLDivElement | null>(null);
   useEffect(() => {
-    if (!loadMoreRef.current) return;
+    const node = loadMoreRef.current; // cache ref value
+    if (!node) return;
 
     const observer = new IntersectionObserver(
       (entries) => {
@@ -50,14 +47,13 @@ export default function CategoriesPage() {
       { threshold: 1 }
     );
 
-    observer.observe(loadMoreRef.current);
+    observer.observe(node);
 
     return () => {
-      if (loadMoreRef.current) {
-        observer.unobserve(loadMoreRef.current);
-      }
+      observer.unobserve(node);
     };
   }, [isLoading, page, totalPages]);
+
   return (
     <>
       <section className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-5 gap-y-10 gap-x-5 m-10">

@@ -3,7 +3,7 @@ import { getTMDBResource } from "@/api/tmdb-resources";
 import { TMDBApiPaths, TMDBGroupResourceResponse } from "@/lib/types";
 
 export default function useFetchTMDBResource(
-  queryKey: string | number | null,
+  queryKey: string | number | null | undefined,
   url: TMDBApiPaths,
   page?: string | number,
   params?: object

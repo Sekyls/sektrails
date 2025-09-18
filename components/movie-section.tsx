@@ -60,7 +60,7 @@ export default function MovieSection({
                         movie.poster_path
                       : "/fallback.jpg"
                   }
-                  imgAlt={movie?.title! || movie.name!}
+                  imgAlt={movie.title ?? movie.name ?? "Unknown"}
                   resource={movie}
                   user={user}
                 />

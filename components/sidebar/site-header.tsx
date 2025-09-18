@@ -5,7 +5,7 @@ import { Search } from "lucide-react";
 import { Input } from "../ui/input";
 import { Button } from "../ui/button";
 import { ThemeToggle } from "../theme-toggler";
-import { useParams, usePathname } from "next/navigation";
+import { usePathname } from "next/navigation";
 import { useAuth } from "@/providers/firebase-auth-provider";
 import { useRouter } from "next/navigation";
 import { cn } from "@/lib/utils";

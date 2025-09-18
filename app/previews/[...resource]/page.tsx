@@ -512,14 +512,16 @@ function RecommendedMovies({
 export default function ResourcePage() {
   const { resource } = useParams<{ resource: string[] }>();
   const [mediaType, ID] = resource;
-  if (!resource || resource.length < 2) {
-    return <p>Invalid resource path</p>;
-  }
   const { data, error } = useFetchTMDBResourceWithExtras(
     ID,
     `/${mediaType}/${ID}` as TMDBApiPaths,
     { append_to_response: "videos,credits,recommendations,similar" }
   );
+
+  if (!resource || resource.length < 2) {
+    return <p>Invalid resource path</p>;
+  }
+
   if (!data) {
     return <p>{error?.message}</p>;
   }

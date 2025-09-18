@@ -4,7 +4,6 @@ import { Image, Link, Share } from "lucide-react";
 import React, { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover";
-import { Button } from "./ui/button";
 
 export default function ShareResource({
   name,
@@ -55,7 +54,7 @@ export default function ShareResource({
         }
       }
     })();
-  }, []);
+  }, [name, overview, poster_path, resourceUrl, title]);
 
   const handleSharePoster = async () => {
     try {

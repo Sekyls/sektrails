@@ -1,4 +1,9 @@
-import { doc, serverTimestamp, setDoc } from "firebase/firestore";
+import {
+  doc,
+  QueryDocumentSnapshot,
+  serverTimestamp,
+  setDoc,
+} from "firebase/firestore";
 import { db } from "@/config/firebase";
 import { User } from "firebase/auth";
 import {
@@ -52,7 +57,10 @@ export async function addBookmark(
   }
 }
 
-export async function getPagedBookmarks(user: User, lastDoc?: any) {
+export async function getPagedBookmarks(
+  user: User,
+  lastDoc?: QueryDocumentSnapshot<TMDBGroupResourceListItem>
+) {
   const ref = collection(db, "users", user.uid, "bookmarks");
 
   let q = query(ref, orderBy("addedAt", "desc"), limit(10));

@@ -3,8 +3,6 @@ import {
   IconBookmarkFilled,
   IconCalendar,
   IconDeviceTv,
-  IconHelp,
-  IconLogout,
   IconMovie,
   IconPlayerPlay,
   IconSearch,
