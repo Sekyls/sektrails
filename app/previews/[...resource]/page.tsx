@@ -11,9 +11,9 @@ import {
 import WidthConstraint from "@/components/ui/width-constraint";
 import useFetchTMDBResourceWithExtras from "@/hooks/use-tmdb-fetch-with-extras";
 import {
-  fetchedReviewData,
+  FetchedReviewData,
   ReviewFormData,
-  reviewsProps,
+  ReviewsProps,
   TMDBApiPaths,
   TMDBCreditsResponse,
   TMDBRecommendationsResponse,
@@ -21,7 +21,7 @@ import {
   TMDBSimilarResponse,
 } from "@/lib/types";
 import { cn } from "@/lib/utils";
-import { Loader2Icon, Share, Star } from "lucide-react";
+import { Loader2Icon, Star } from "lucide-react";
 import Image from "next/image";
 import React, { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
@@ -69,9 +69,14 @@ import {
   CarouselItem,
 } from "@/components/ui/carousel";
 import Autoplay from "embla-carousel-autoplay";
+import ShareResource from "@/components/share-resource";
+import WatchTrailer from "@/components/watch-trailer";
 
 function ResourceData({ meta }: { meta: TMDBResourceWithExtras }) {
   const { user } = useAuth();
+  const trailer = meta?.videos?.results?.find(
+    (v) => v.site === "YouTube" && v.type === "Trailer"
+  );
   return (
     <section className="mb-20">
       <Card className={cn("p-0")}>
@@ -92,12 +97,17 @@ function ResourceData({ meta }: { meta: TMDBResourceWithExtras }) {
             <h1 className="text-primary font tracking-widest hover-underline">
               {meta.title}
             </h1>
-            <Button
-              className="text-2xl font-dancingScript font-bold"
-              size={"lg"}
-            >
-              Watch Trailer
-            </Button>
+            {trailer ? (
+              <WatchTrailer videoKey={trailer.key} name={trailer.name} />
+            ) : (
+              <Button
+                className="text-3xl px-2 font-dancingScript font-bold h-auto py-2"
+                size="lg"
+                disabled
+              >
+                No trailer available
+              </Button>
+            )}
           </WidthConstraint>
         </CardContent>
         <WidthConstraint>
@@ -154,7 +164,12 @@ function ResourceData({ meta }: { meta: TMDBResourceWithExtras }) {
                 </div>
                 <div className="flex gap-x-1 text-primary font-semibold items-center justify-center">
                   <p className="text-foreground">Share</p>
-                  <Share />
+                  <ShareResource
+                    poster_path={meta.poster_path}
+                    overview={meta.overview}
+                    name={meta.name}
+                    title={meta.title}
+                  />
                 </div>
               </div>
             </article>
@@ -169,9 +184,9 @@ function ResourceData({ meta }: { meta: TMDBResourceWithExtras }) {
   );
 }
 
-function ResourceReviews({ mediaType, resourceID }: reviewsProps) {
+function ResourceReviews({ mediaType, resourceID }: ReviewsProps) {
   const { user } = useAuth();
-  const [reviews, setReviews] = useState<fetchedReviewData[]>([]);
+  const [reviews, setReviews] = useState<FetchedReviewData[]>([]);
 
   const reviewSchema = z
     .object({
@@ -222,9 +237,9 @@ function ResourceReviews({ mediaType, resourceID }: reviewsProps) {
           },
           classNames: { actionButton: "bg-green-700! text-white!" },
         }),
-        error: (err) => ({
+        error: () => ({
           message: "Review addition failed",
-          description: err.message,
+          description: "Log in to add reviews",
           action: {
             label: "Failed!",
             onClick: () => {},
@@ -255,7 +270,8 @@ function ResourceReviews({ mediaType, resourceID }: reviewsProps) {
           }}
           plugins={[
             Autoplay({
-              delay: 2000,
+              delay: 3000,
+              stopOnMouseEnter: true,
             }),
           ]}
         >
@@ -263,7 +279,7 @@ function ResourceReviews({ mediaType, resourceID }: reviewsProps) {
             {reviews.map((review, index) => {
               return (
                 <CarouselItem className="basis-1/4" key={index}>
-                  <Card className="max-w-sm p-2 space-y-2.5 block rounded-md">
+                  <Card className="max-w-sm p-2 space-y-2.5 block rounded-md bg-primary/80 text-white dark:bg-transparent">
                     <div className="flex items-center gap-x-5">
                       <Avatar>
                         <AvatarImage src={review.profileImage} alt="avatar" />
@@ -271,7 +287,7 @@ function ResourceReviews({ mediaType, resourceID }: reviewsProps) {
                       </Avatar>
                       <CardTitle className="text-left">{review.name}</CardTitle>
                     </div>
-                    <CardDescription className="text-left tracking-wide text-pretty space-y-1">
+                    <CardDescription className="text-left tracking-wide text-pretty space-y-1 text-white dark:text-white/50">
                       <span className="flex gap-x-0.5">
                         {Array.from(
                           { length: parseInt(review.ratings) },
@@ -280,7 +296,7 @@ function ResourceReviews({ mediaType, resourceID }: reviewsProps) {
                               <Star
                                 key={index}
                                 size={16}
-                                className="text-primary"
+                                className="text-black fill-white dark:fill-transparent dark:text-primary"
                               />
                             );
                           }
@@ -295,7 +311,7 @@ function ResourceReviews({ mediaType, resourceID }: reviewsProps) {
           </CarouselContent>
         </Carousel>
         {reviews.length < 1 && (
-          <h4 className="tracking-widest">NO Reviews Yet</h4>
+          <h4 className="tracking-widest">No Reviews Yet</h4>
         )}
         <Dialog>
           <Form {...reviewForm}>
@@ -446,7 +462,7 @@ function SimilarMovies({ similar }: { similar: TMDBSimilarResponse }) {
               }
               imgAlt={movie.name || movie.title || "N/A"}
               title={movie.name || movie.title || "N/A"}
-              mediaType={movie.media_type!}
+              mediaType={movie.title ? "movie" : "tv"}
               resourceID={movie.id}
               resource={movie}
               user={user}
@@ -481,7 +497,7 @@ function RecommendedMovies({
               }
               imgAlt={movie.name || movie.title || "N/A"}
               title={movie.name || movie.title || "N/A"}
-              mediaType={movie.media_type!}
+              mediaType={movie.title ? "movie" : "tv"}
               resourceID={movie.id}
               resource={movie}
               user={user}

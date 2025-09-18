@@ -107,12 +107,12 @@ export type TMDBGroupResourceResponse = {
 };
 
 export type TMDBVideo = {
-  id: string;
-  key: string;
-  site: string;
-  type: string;
-  official: boolean;
-  name: string;
+  id?: string;
+  key?: string;
+  site?: string;
+  type?: string;
+  official?: boolean;
+  name?: string;
 };
 
 export type TMDBVideosResponse = {
@@ -151,7 +151,7 @@ export type TMDBResourceWithExtras = {
   title?: string; // movies
   name?: string; // tv
   backdrop_path: string | null;
-  poster_path: string | null;
+  poster_path: string;
   overview: string;
   genres: { id: number; name: string }[];
   original_language: string;
@@ -192,12 +192,12 @@ export type ReviewFormData = {
   resourceID: number;
 };
 
-export type reviewsProps = {
+export type ReviewsProps = {
   mediaType: "movie" | "tv";
   resourceID: number;
 };
 
-export type fetchedReviewData = {
+export type FetchedReviewData = {
   id: string;
   userId: string;
   name: string;
@@ -205,4 +205,27 @@ export type fetchedReviewData = {
   review: string;
   ratings: string;
   addedAt?: Date;
+};
+
+export type TinyUrlResponse = {
+  data: {
+    tiny_url: string;
+    url: string;
+  };
+  code: number;
+  errors: [];
+};
+
+export type ShareResourceProps = {
+  poster_path: string;
+  overview: string;
+  name: string | undefined;
+  title: string | undefined;
+};
+
+export type ShareFileProps = {
+  title: string;
+  text: string;
+  url: string;
+  files: File[];
 };

@@ -1,7 +1,7 @@
 import { addDoc, onSnapshot, serverTimestamp } from "firebase/firestore";
 import { db } from "@/config/firebase";
 import { collection, orderBy, query } from "firebase/firestore";
-import { fetchedReviewData, ReviewFormData } from "./types";
+import { FetchedReviewData, ReviewFormData } from "./types";
 
 export async function addReview({
   resourceID,
@@ -34,7 +34,7 @@ export async function addReview({
 export function getReviews(
   mediaType: string,
   resourceID: string,
-  setReviews: (reviews: fetchedReviewData[]) => void
+  setReviews: (reviews: FetchedReviewData[]) => void
 ) {
   const reviewsRef = collection(
     db,
@@ -52,7 +52,7 @@ export function getReviews(
         id: doc.id,
         ...data,
         addedAt: data.addedAt?.toDate?.(),
-      } as fetchedReviewData;
+      } as FetchedReviewData;
     });
     setReviews(reviews);
   });

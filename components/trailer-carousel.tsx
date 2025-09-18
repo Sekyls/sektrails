@@ -1,6 +1,6 @@
 "use client";
 import * as React from "react";
-import { useRef, useState, useEffect } from "react";
+import { useRef, useState, useEffect, useCallback } from "react";
 import Autoplay from "embla-carousel-autoplay";
 import { TRAILERS } from "@/lib/constants";
 import { Card, CardContent } from "@/components/ui/card";
@@ -19,31 +19,135 @@ export default function TrailersCarousel() {
   const trailerRefs = useRef<(HTMLVideoElement | null)[]>([]);
   const [api, setApi] = useState<CarouselApi>();
   const [isMuted, setIsMuted] = useState<boolean>(true);
+  const [videosLoaded, setVideosLoaded] = useState<boolean[]>(
+    new Array(TRAILERS.length).fill(false)
+  );
 
+  // Reset refs array and cleanup when component mounts/unmounts
   useEffect(() => {
-    function handlePlay() {
-      if (!api) {
-        return;
-      }
-      const currentSlideIndex = api?.selectedScrollSnap();
-      trailerRefs.current.forEach((trailer, trailerIndex) => {
-        if (!trailer) {
-          return;
-        }
-        if (currentSlideIndex === trailerIndex) {
-          trailer?.play();
-        } else {
-          trailer?.pause();
-          trailer.currentTime = 0;
+    trailerRefs.current = new Array(TRAILERS.length).fill(null);
+    setVideosLoaded(new Array(TRAILERS.length).fill(false));
+
+    // Cleanup function
+    return () => {
+      trailerRefs.current.forEach((video) => {
+        if (video) {
+          video.pause();
+          video.removeEventListener("loadeddata", () => {});
+          video.removeEventListener("loadstart", () => {});
         }
       });
-    }
-    handlePlay();
-    api?.on("select", handlePlay);
-    return () => {
-      api?.off("select", handlePlay);
     };
-  }, [api]);
+  }, [TRAILERS.length]);
+
+  const handleVideoRef = useCallback(
+    (video: HTMLVideoElement | null, index: number) => {
+      if (video && trailerRefs.current[index] !== video) {
+        trailerRefs.current[index] = video;
+
+        // Add event listeners for video loading
+        const handleLoadedData = () => {
+          setVideosLoaded((prev) => {
+            if (prev[index] !== true) {
+              const newLoaded = [...prev];
+              newLoaded[index] = true;
+              return newLoaded;
+            }
+            return prev;
+          });
+        };
+
+        const handleLoadStart = () => {
+          setVideosLoaded((prev) => {
+            if (prev[index] !== false) {
+              const newLoaded = [...prev];
+              newLoaded[index] = false;
+              return newLoaded;
+            }
+            return prev;
+          });
+        };
+
+        // Remove any existing listeners first
+        video.removeEventListener("loadeddata", handleLoadedData);
+        video.removeEventListener("loadstart", handleLoadStart);
+
+        // Add new listeners
+        video.addEventListener("loadeddata", handleLoadedData);
+        video.addEventListener("loadstart", handleLoadStart);
+
+        // Check if video is already ready
+        if (video.readyState >= 2) {
+          setTimeout(() => handleLoadedData(), 0);
+        }
+      }
+    },
+    []
+  );
+
+  const handlePlay = useCallback(() => {
+    if (!api) {
+      return;
+    }
+
+    const currentSlideIndex = api.selectedScrollSnap();
+
+    trailerRefs.current.forEach((trailer, trailerIndex) => {
+      if (!trailer) {
+        return;
+      }
+
+      if (currentSlideIndex === trailerIndex && videosLoaded[trailerIndex]) {
+        // Small delay to ensure video is ready
+        setTimeout(() => {
+          trailer.play().catch((error) => {
+            console.log("Video play failed:", error);
+          });
+        }, 100);
+      } else {
+        trailer.pause();
+        trailer.currentTime = 0;
+      }
+    });
+  }, [api, videosLoaded]);
+
+  useEffect(() => {
+    if (!api) return;
+
+    // Small delay to ensure component is fully mounted
+    const timer = setTimeout(() => {
+      handlePlay();
+    }, 100);
+
+    // Listen for slide changes
+    api.on("select", handlePlay);
+
+    return () => {
+      clearTimeout(timer);
+      api.off("select", handlePlay);
+    };
+  }, [api, handlePlay]);
+
+  // Additional effect to handle initial play with delay on mount
+  useEffect(() => {
+    if (api) {
+      const mountTimer = setTimeout(() => {
+        handlePlay();
+      }, 200);
+
+      return () => clearTimeout(mountTimer);
+    }
+  }, [api, handlePlay]);
+
+  // Handle mute state changes
+  useEffect(() => {
+    trailerRefs.current.forEach((trailer) => {
+      if (trailer) {
+        trailer.muted = isMuted;
+      }
+    });
+  }, [isMuted]);
+
   return (
     <>
       <Carousel
@@ -61,7 +165,10 @@ export default function TrailersCarousel() {
       >
         <CarouselContent className="w-full m-0">
           {TRAILERS.map((trailer, index) => (
-            <CarouselItem key={index} className="w-full p-0">
+            <CarouselItem
+              key={`${trailer.path}-${index}`}
+              className="w-full p-0"
+            >
               <Card className="rounded-none p-0 w-full border-0 outline-0 bg-background">
                 <CardContent className="flex items-center justify-center w-full p-0 relative">
                   {trailer?.path ? (
@@ -69,10 +176,10 @@ export default function TrailersCarousel() {
                       className="w-full h-auto block relative -top-8"
                       src={trailer.path}
                       muted={isMuted}
-                      ref={(video) => {
-                        trailerRefs.current[index] = video;
-                      }}
-                      key={trailer.path}
+                      preload="metadata"
+                      playsInline
+                      ref={(video) => handleVideoRef(video, index)}
+                      key={`${trailer.path}-${index}`}
                     />
                   ) : (
                     <div className="w-full h-[400px] flex items-center justify-center bg-black text-white">
