@@ -270,7 +270,7 @@ function ResourceReviews({ mediaType, resourceID }: ReviewsProps) {
           }}
           plugins={[
             Autoplay({
-              delay: 3000,
+              delay: 2000,
               stopOnMouseEnter: true,
             }),
           ]}

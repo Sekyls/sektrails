@@ -104,18 +104,17 @@ export default function TrailersCarousel() {
   }, [api, videosLoaded]);
 
   // Run handlePlay when carousel changes
-useEffect(() => {
-  if (!api) return;
+  useEffect(() => {
+    if (!api) return;
 
-  handlePlay(); // play initial slide
-  api.on("select", handlePlay);
+    handlePlay(); // play initial slide
+    api.on("select", handlePlay);
 
-  // Cleanup function
-  return () => {
-    api.off("select", handlePlay); // wrapped in void-returning function
-  };
-}, [api, handlePlay]);
-
+    // Cleanup function
+    return () => {
+      api.off("select", handlePlay); // wrapped in void-returning function
+    };
+  }, [api, handlePlay]);
 
   // Mute/unmute videos
   useEffect(() => {
@@ -141,7 +140,7 @@ useEffect(() => {
               <CardContent className="flex items-center justify-center w-full p-0 relative">
                 {trailer?.path ? (
                   <video
-                    className="w-full h-auto block relative -top-8"
+                    className="w-full h-auto block relative -top-8 aspect-video"
                     src={trailer.path}
                     muted={isMuted}
                     preload="metadata"
