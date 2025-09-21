@@ -26,22 +26,22 @@ export default function MovieSection({
 
   return (
     <WidthConstraint className="space-y-2">
-      <div className="flex justify-between items-center text-primary font-bold ">
-        <h4 className="hover-underline mb-2">{category}</h4>
+      <div className="flex justify-between items-center text-primary font-bold mb-3 ">
+        <h4 className="hover-underline tracking-wider">{category}</h4>
         <Link
           href={seeAllLink || ""}
           className="flex gap-x-1 items-center group"
         >
-          <p className="text-3xl"> See more</p>
+          <p className="hidden min-[400px]:block text-3xl"> See more</p>
           <ArrowRight size={18} className="group-hover:animate-bounce" />
         </Link>
       </div>
       <Carousel>
-        <CarouselContent>
+        <CarouselContent className="mx-auto">
           {resource?.map((movie, index) => {
             return (
               <CarouselItem
-                className="md:basis-1/2 lg:basis-1/5 px-4"
+                className="basis-1/2 lg:basis-1/3 xl:basis-1/4 sm:px-4"
                 key={index}
               >
                 <MovieCard
@@ -68,8 +68,8 @@ export default function MovieSection({
             );
           })}
         </CarouselContent>
-        <CarouselPrevious className="border-primary text-primary hover:bg-primary! hover:text-white!" />
-        <CarouselNext className="border-primary text-primary hover:bg-primary! hover:text-white!" />
+        <CarouselPrevious className="hidden md:flex border-primary text-primary hover:bg-primary! hover:text-white!" />
+        <CarouselNext className="hidden md:flex border-primary text-primary hover:bg-primary! hover:text-white!" />
       </Carousel>
     </WidthConstraint>
   );

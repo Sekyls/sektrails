@@ -103,11 +103,11 @@ export const SOCIAL_LINKS = [
       "mailto:denipsyp@gmail.com?subject=Hello&body=I%20want%20to%20contact%20you",
     imgPath: "/socials/email.png",
   },
-  {
-    name: "Telephone",
-    webUrl: "tel:+233596379243",
-    imgPath: "/socials/telephone.png",
-  },
+  // {
+  //   name: "Telephone",
+  //   webUrl: "tel:+233596379243",
+  //   imgPath: "/socials/telephone.png",
+  // },
   {
     name: "LinkedIn",
     webUrl: "https://www.linkedin.com/in/sekyls",
@@ -123,11 +123,11 @@ export const SOCIAL_LINKS = [
     webUrl: "https://www.instagram.com/opoku_sekyi_dennis/",
     imgPath: "/socials/instagram.png",
   },
-  {
-    name: "Telegram",
-    webUrl: "https://t.me/Opoku_Sekyi_Dennis",
-    imgPath: "/socials/telegram.png",
-  },
+  // {
+  //   name: "Telegram",
+  //   webUrl: "https://t.me/Opoku_Sekyi_Dennis",
+  //   imgPath: "/socials/telegram.png",
+  // },
   {
     name: "GitHub",
     webUrl: "https://github.com/Sekyls",

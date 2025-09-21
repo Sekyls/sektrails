@@ -146,7 +146,7 @@ export default function TrailersCarousel() {
         align: "center",
         loop: true,
       }}
-      plugins={[Autoplay({ delay: 50000 })]}
+      plugins={[Autoplay({ delay: 40000 })]}
       className="w-full"
     >
       <CarouselContent className="w-full m-0">
@@ -163,15 +163,18 @@ export default function TrailersCarousel() {
                     muted={isMuted}
                     ref={(video) => handleVideoRef(video, index)}
                     controls={false}
+                    loop
                   />
                 ) : (
                   <div className="w-full h-[400px] flex items-center justify-center bg-black text-white">
                     Missing trailer
                   </div>
                 )}
-                <figcaption className="absolute bottom-1/12 lg:bottom-1/6 text-center">
-                  <h3 className="text-primary">{trailer.title}</h3>
-                  <p className="max-w-xl text-white font-bold">
+                <figcaption className="absolute bottom-1/6 max-[492px]:bottom-1/4 max-[317px]:hidden text-center">
+                  <h3 className="text-primary max-[492px]:text-base!">
+                    {trailer.title}
+                  </h3>
+                  <p className="hidden md:block max-w-xl text-white font-bold">
                     {trailer.description}
                   </p>
                 </figcaption>
@@ -181,12 +184,12 @@ export default function TrailersCarousel() {
           </CarouselItem>
         ))}
       </CarouselContent>
-      <CarouselPrevious className="hidden sm:flex bg-primary! ml-10 border-0 sm:size-10 hover:bg-primary/50 hover:text-white hover:scale-105 z-50 left-0" />
-      <CarouselNext className="hidden sm:flex bg-primary! mr-10 border-0 sm:size-10 hover:bg-primary/50 hover:text-white hover:scale-105 z-50 right-0" />
+      <CarouselPrevious className="hidden md:flex bg-primary! ml-10 border-0 sm:size-10 hover:bg-primary/50 hover:text-white hover:scale-105 z-50 left-0" />
+      <CarouselNext className="hidden md:flex bg-primary! mr-10 border-0 sm:size-10 hover:bg-primary/50 hover:text-white hover:scale-105 z-50 right-0" />
       <Button
         size={"icon"}
         onClick={() => setIsMuted(!isMuted)}
-        className="absolute text-white size-8 sm:size-10 rounded-full bottom-1/6 right-0 mr-10 bg-transparent border-primary border backdrop-blur-2xl focus:ring-0"
+        className="absolute text-white size-6 sm:size-10 rounded-full max-[360px]:bottom-1/2 max-[360px]:size-6 max-[492px]:bottom-1/4 bottom-1/5 sm:bottom-1/6 right-0 mr-5 sm:mr-10 bg-transparent border-primary border backdrop-blur-2xl focus:ring-0"
       >
         {isMuted ? <VolumeOff /> : <Volume2 />}
       </Button>

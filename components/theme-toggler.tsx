@@ -12,13 +12,14 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { cn } from "@/lib/utils";
 
-export function ThemeToggle() {
+export function ThemeToggle({ className }: { className?: string }) {
   const { setTheme } = useTheme();
 
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger asChild>
+      <DropdownMenuTrigger asChild className={cn("", className)}>
         <Button
           variant="outline"
           size="icon"
@@ -29,7 +30,11 @@ export function ThemeToggle() {
           <span className="sr-only">Toggle theme</span>
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="end" className="border-ring/50">
+      <DropdownMenuContent
+        align="center"
+        sideOffset={5}
+        className="border-ring/50"
+      >
         <DropdownMenuItem
           onClick={() => setTheme("light")}
           className="hover:bg-primary! dark:hover:bg-primary! hover:text-white! "

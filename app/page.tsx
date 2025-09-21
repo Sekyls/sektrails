@@ -10,7 +10,7 @@ import React from "react";
 
 const Home = () => {
   return (
-    <>
+    <div className="overflow-x-hidden">
       <header>
         <NavigationBar />
       </header>
@@ -49,7 +49,7 @@ const Home = () => {
       <footer className="w-full mt-45 space-y-10 pb-8 bg-primary text-white pt-10">
         <Footer />
       </footer>
-    </>
+    </div>
   );
 };
 
