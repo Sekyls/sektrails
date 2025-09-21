@@ -12,8 +12,10 @@ import { useQuery } from "@tanstack/react-query";
 import { getTMDBResource } from "@/api/tmdb-resources";
 import { TMDBApiPaths, TMDBGroupResourceResponse } from "@/lib/types";
 import Autoplay from "embla-carousel-autoplay";
+import { useRouter } from "next/navigation";
 
 export default function MoreForYou() {
+  const router = useRouter();
   const { data } = useQuery<TMDBGroupResourceResponse>({
     queryKey: ["more-for-you"],
     queryFn: () =>
@@ -43,7 +45,20 @@ export default function MoreForYou() {
       <CarouselContent>
         {MovieCategoryList?.map((movie, index) => {
           return (
-            <CarouselItem key={index}>
+            <CarouselItem
+              key={index}
+              onClick={() => {
+                router.push(
+                  `/previews/${
+                    movie.media_type
+                      ? movie.media_type
+                      : movie.title
+                      ? "movie"
+                      : "tv"
+                  }/${movie.id}`
+                );
+              }}
+            >
               <Card className="border-0 relative p-0">
                 <CardContent className="p-0">
                   <Image
@@ -54,14 +69,14 @@ export default function MoreForYou() {
                       movie.backdrop_path
                     }
                     alt={movie.title ?? movie.name ?? "Unknown"}
-                    className="w-full rounded-2xl h-150"
+                    className="w-full rounded-2xl "
                   />
                 </CardContent>
-                <CardFooter className="absolute bottom-20 flex-col justify-center items-center mx-auto px-20 font-black space-y-2">
-                  <h3 className="text-center mx-auto text-primary">
+                <CardFooter className="absolute bottom-0 left-0 right-0 sm:bottom-20 flex-col justify-center items-center font-black space-y-2">
+                  <h3 className="text-shadow-md tracking-wider text-shadow-primary text-center">
                     {movie.title || movie.name}
                   </h3>
-                  <p className="max-w-1/2 text-center mx-auto text-white backdrop-blur-xs rounded-2xl font-bold">
+                  <p className="hidden sm:block max-w-1/2 text-center  text-white backdrop-blur-xs rounded-2xl font-bold truncate">
                     {movie.overview}
                   </p>
                 </CardFooter>
@@ -70,8 +85,8 @@ export default function MoreForYou() {
           );
         })}
       </CarouselContent>
-      <CarouselPrevious className="border-primary text-primary hover:bg-primary! hover:text-white!" />
-      <CarouselNext className="border-primary text-primary hover:bg-primary! hover:text-white!" />
+      <CarouselPrevious className="hidden md:flex border-primary text-primary hover:bg-primary! hover:text-white!" />
+      <CarouselNext className="hidden md:flex border-primary text-primary hover:bg-primary! hover:text-white!" />
     </Carousel>
   );
 }

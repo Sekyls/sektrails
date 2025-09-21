@@ -8,7 +8,7 @@ export default function Footer() {
   return (
     <>
       <WidthConstraint>
-        <section className="grid sm:grid-cols-2 md:grid-cols-[2fr_1fr_1fr] place-content-center gap-40">
+        <section className="grid sm:grid-cols-2 place-content-center gap-20 justify-between">
           <div>
             <Link href={"/"} className="font-leckerli text-4xl hover-underline">
               Sektrails
@@ -32,36 +32,38 @@ export default function Footer() {
                       alt={social.name}
                       width={36}
                       height={36}
-                      className="drop-shadow-md drop-shadow-white/80 hover:scale-110 hover:drop-shadow-accent transition-all duration-500 ease-in-out"
+                      className="size-7 sm:size-9 drop-shadow-md drop-shadow-white/80 hover:scale-110 hover:drop-shadow-accent transition-all duration-500 ease-in-out"
                     />
                   </a>
                 );
               })}
             </div>
           </div>
-          {FOOTER_LINKS.map((col, index) => {
-            return (
-              <div key={index} className="ml-auto">
-                <h3 className="hover-underline">{col.header}</h3>
-                {col.links.map((link, locus) => {
-                  return (
-                    <Link
-                      href={link.sublink}
-                      key={locus}
-                      className="block my-5"
-                    >
-                      {link.title}
-                    </Link>
-                  );
-                })}
-              </div>
-            );
-          })}
+          <div className="flex justify-between gap-10 flex-wrap">
+            {FOOTER_LINKS.map((col, index) => {
+              return (
+                <div key={index} className="sm:ml-auto">
+                  <h3 className="hover-underline">{col.header}</h3>
+                  {col.links.map((link, locus) => {
+                    return (
+                      <Link
+                        href={link.sublink}
+                        key={locus}
+                        className="block my-5"
+                      >
+                        {link.title}
+                      </Link>
+                    );
+                  })}
+                </div>
+              );
+            })}
+          </div>
         </section>
       </WidthConstraint>
       <hr className="w-11/12 mx-auto bg-white" />
       <WidthConstraint>
-        <section className="flex flex-col sm:flex-row justify-between items-center">
+        <section className="flex flex-col sm:flex-row justify-between items-center text-center md:text-left space-y-2">
           <p>
             Copyright &copy;{new Date().getFullYear()} Sektrails | All rights
             reserved{" "}

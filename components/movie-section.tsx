@@ -41,7 +41,7 @@ export default function MovieSection({
           {resource?.map((movie, index) => {
             return (
               <CarouselItem
-                className="basis-1/2 lg:basis-1/3 xl:basis-1/4 px-4"
+                className="basis-1/2 lg:basis-1/3 xl:basis-1/4 sm:px-4"
                 key={index}
               >
                 <MovieCard
