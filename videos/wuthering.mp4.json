@@ -1,0 +1,23 @@
+{
+  "status": "ready",
+  "originalFilePath": "videos\\wuthering.mp4",
+  "provider": "mux",
+  "providerMetadata": {
+    "mux": {
+      "uploadId": "OEAm8TDjzw7yf3LwMEG3uV5tLe7tbIOZNwuLytwWp024",
+      "assetId": "JCw5KZiInW02mdUx1DzPNu13qYVtqlHfCvCXTg2S01v00k",
+      "playbackId": "RjPQqRfCas8mo01gTG6m5qHyBMQ8SMJUgsogX1ukXICQ"
+    }
+  },
+  "createdAt": 1758421332784,
+  "updatedAt": 1758421542342,
+  "size": 18443449,
+  "sources": [
+    {
+      "src": "https://stream.mux.com/RjPQqRfCas8mo01gTG6m5qHyBMQ8SMJUgsogX1ukXICQ.m3u8",
+      "type": "application/x-mpegURL"
+    }
+  ],
+  "poster": "https://image.mux.com/RjPQqRfCas8mo01gTG6m5qHyBMQ8SMJUgsogX1ukXICQ/thumbnail.webp",
+  "blurDataURL": "data:image/webp;base64,UklGRnAAAABXRUJQVlA4IGQAAAAQAgCdASoQAAkAAQAcJZQCdH8AF7cPWE6gAP7/WJgF89r38194z1qzu/2DP5wHrdf+lN8/PBKQjAPvVfgYR7P9x/+k26h6+bhMrngTZoeV7jJ42KyW6QTONbdUdLTg5f9aCAAA"
+}

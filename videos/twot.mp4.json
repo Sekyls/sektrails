@@ -1,0 +1,23 @@
+{
+  "status": "ready",
+  "originalFilePath": "videos\\twot.mp4",
+  "provider": "mux",
+  "providerMetadata": {
+    "mux": {
+      "uploadId": "YDdBodsTiT2MhmvHNLsthjmRJsuUhtF7wnqrfEYyz3k",
+      "assetId": "xFvPZKBYDZUm01etlbbJBinqn3003e00ggTOjjFtokxnHY",
+      "playbackId": "VZLc8lu01N13Ufc7TH5QJGxW830001S2KVYUwdaLLH9W7U"
+    }
+  },
+  "createdAt": 1758421332772,
+  "updatedAt": 1758421607452,
+  "size": 39310794,
+  "sources": [
+    {
+      "src": "https://stream.mux.com/VZLc8lu01N13Ufc7TH5QJGxW830001S2KVYUwdaLLH9W7U.m3u8",
+      "type": "application/x-mpegURL"
+    }
+  ],
+  "poster": "https://image.mux.com/VZLc8lu01N13Ufc7TH5QJGxW830001S2KVYUwdaLLH9W7U/thumbnail.webp",
+  "blurDataURL": "data:image/webp;base64,UklGRkAAAABXRUJQVlA4IDQAAADQAQCdASoQAAkAAQAcJaQCw7Ef/6CNgAD+/2h2AAcPvrqMncS4yIa3Iho3R6cNBGnyBAAA"
+}
