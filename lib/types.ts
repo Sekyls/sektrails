@@ -16,7 +16,12 @@ export type AvatarUser = {
     uid: string | null;
   } | null;
   loading?: boolean;
+  className?: string;
+  align?: "center" | "start" | "end" | undefined;
+  sideOffset?: number;
 };
+
+export type MobileNavProps = MobileToggleProps & AvatarUser;
 
 export type NavProps = MobileToggleProps & AvatarUser;
 

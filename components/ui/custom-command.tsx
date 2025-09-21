@@ -38,7 +38,7 @@ function CommandInput({
         router.push(`/specialties/search?query=${search}`);
       }}
       data-slot="command-input-wrapper"
-      className="flex h-9 items-center gap-2 mt-2 border rounded-md border-gray-300 pl-2"
+      className="flex items-center gap-2 border rounded-md border-gray-300/40 pl-2"
     >
       <SearchIcon
         onClick={(e) => {
@@ -46,7 +46,7 @@ function CommandInput({
           router.push(`/specialties/search?query=${search}`);
         }}
         type="submit"
-        className="size-4 shrink-0 opacity-50 hover:text-green-400"
+        className="size-4 shrink-0 text-primary"
       />
       <Input
         value={search}
@@ -56,7 +56,7 @@ function CommandInput({
         autoComplete="on"
         data-slot="command-input"
         className={cn(
-          "placeholder:text-muted-foreground flex h-10 w-full rounded-md bg-transparent py-3 text-sm outline-hidden disabled:cursor-not-allowed disabled:opacity-50 focus-visible:border-0 focus-visible:ring-0 border-0 text-primary",
+          "placeholder:text-muted-foreground flex w-full rounded-md bg-transparent text-sm outline-hidden disabled:cursor-not-allowed disabled:opacity-50 focus-visible:border-0 focus-visible:ring-0 border-0 text-primary",
           className
         )}
         {...props}
