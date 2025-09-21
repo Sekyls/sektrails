@@ -21,7 +21,7 @@ const NavigationMenu = ({ isOpen, setIsOpen, user, loading }: NavProps) => {
       <section className="flex justify-between mx-5 my-2 md:mx-0 md:my-0 md:p-5 sm:gap-x-10 items-center md:grid grid-cols-3 md:justify-start md:gap-x-0 z-50">
         <Link
           href={"/"}
-          className="font-leckerli text-4xl hover-underline text-primary"
+          className="font-leckerli sm:text-4xl hover-underline text-primary"
         >
           Sektrails
         </Link>
@@ -64,7 +64,7 @@ const NavigationMenu = ({ isOpen, setIsOpen, user, loading }: NavProps) => {
                 setIsOpen(!isOpen);
               }}
               className={cn(
-                "md:hidden relative",
+                "md:hidden size-5 sm:size-8",
                 isOpen === false ? "text-primary" : "text-red-300"
               )}
             />
