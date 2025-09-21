@@ -1,10 +1,29 @@
 import type { Metadata } from "next";
-import { Bebas_Neue, Inter } from "next/font/google";
+import {
+  Bebas_Neue,
+  Inter,
+  Leckerli_One,
+  Dancing_Script,
+} from "next/font/google";
 import "./globals.css";
-import NavigationBar from "@/components/navigation-menu";
+import "firebaseui/dist/firebaseui.css";
 import TanstackQueryProvider from "@/providers/tanstack-query-provider";
 import { ThemeProvider } from "@/providers/theme-provider";
+import { FirebaseAuthProvider } from "@/providers/firebase-auth-provider";
+import { Toaster } from "@/components/ui/sonner";
 
+const leckerli = Leckerli_One({
+  variable: "--font-leckerli",
+  weight: ["400"],
+  subsets: ["latin"],
+  display: "swap",
+});
+const dancingScript = Dancing_Script({
+  variable: "--font-dancingScript",
+  weight: ["400", "500", "600", "700"],
+  subsets: ["latin"],
+  display: "swap",
+});
 const bebasNeue = Bebas_Neue({
   variable: "--font-Bebas-Neue",
   weight: ["400"],
@@ -120,7 +139,8 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body
-        className={`${inter.className}  antialiased overflow-x-hidden scroll-smooth`}
+        suppressHydrationWarning
+        className={`${inter.className} ${bebasNeue.variable} ${leckerli.variable} ${dancingScript.variable}  antialiased overflow-x-hidden scroll-smooth`}
       >
         <ThemeProvider
           attribute="class"
@@ -128,10 +148,10 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          <TanstackQueryProvider>
-            <NavigationBar />
-            {children}
-          </TanstackQueryProvider>
+          <FirebaseAuthProvider>
+            <TanstackQueryProvider>{children}</TanstackQueryProvider>
+          </FirebaseAuthProvider>
+          <Toaster />
         </ThemeProvider>
       </body>
     </html>
