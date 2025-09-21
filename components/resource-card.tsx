@@ -22,7 +22,7 @@ export default function MovieCard({
   return (
     <Card
       className={cn(
-        "max-w-2xs max-h-[465px] overflow-hidden p-1.5 rounded-3xl gap-2 bg-primary text-white border-0 outline-0 font-medium"
+        "max-w-2xs w-fit max-h-[465px] overflow-hidden p-0 sm:p-1.5 rounded-3xl gap-2 sm:bg-primary text-white sm:border-0 border border-primary sm:outline-0 font-medium"
       )}
     >
       <CardContent
@@ -39,7 +39,7 @@ export default function MovieCard({
           height={750}
         />
       </CardContent>
-      <CardFooter className="flex justify-between px-3 pb-1">
+      <CardFooter className="sm:flex justify-between px-3 pb-1 hidden">
         <p className="truncate w-50">{title}</p>
         {!bookmarked && <Bookmark user={user} resource={resource} />}
         {bookmarked && <BookCheck />}
