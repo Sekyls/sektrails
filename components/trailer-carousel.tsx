@@ -14,6 +14,7 @@ import {
 } from "@/components/ui/carousel";
 import { Button } from "./ui/button";
 import { Volume2, VolumeOff } from "lucide-react";
+import BackgroundVideo from "next-video/background-video";
 
 export default function TrailersCarousel() {
   const trailerRefs = useRef<(HTMLVideoElement | null)[]>([]);
@@ -154,13 +155,14 @@ export default function TrailersCarousel() {
             <Card className="rounded-none p-0 w-full border-0 outline-0 bg-background">
               <CardContent className="flex items-center justify-center w-full p-0 relative">
                 {trailer?.path ? (
-                  <video
+                  <BackgroundVideo
                     className="w-full h-auto block relative -top-8 aspect-video"
                     src={trailer.path}
                     preload="auto"
                     playsInline
                     muted={isMuted}
                     ref={(video) => handleVideoRef(video, index)}
+                    controls={false}
                   />
                 ) : (
                   <div className="w-full h-[400px] flex items-center justify-center bg-black text-white">
