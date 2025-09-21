@@ -32,12 +32,6 @@ export const TRAILERS = [
     description:
       "Moiraine, a member of a magical organization, takes five young people on a journey, believing that one of them might be the reincarnation of the Dragon, a powerful individual prophesied to save the world or destroy it.",
   },
-  {
-    path: "trailers/superman.mp4",
-    title: "Superman",
-    description:
-      "When Superman gets drawn into conflicts at home and abroad, his actions are questioned, giving tech billionaire Lex Luthor the opportunity to get the Man of Steel out of the way for good. Will intrepid reporter Lois Lane and Superman's four-legged companion, Krypto, be able to help him before it's too late?",
-  },
 ];
 
 export const MOVIE_SECTIONS = [

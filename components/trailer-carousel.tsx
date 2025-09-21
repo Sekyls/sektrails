@@ -19,109 +19,124 @@ export default function TrailersCarousel() {
   const trailerRefs = useRef<(HTMLVideoElement | null)[]>([]);
   const [api, setApi] = useState<CarouselApi>();
   const [isMuted, setIsMuted] = useState<boolean>(true);
-  const [videosLoaded, setVideosLoaded] = useState<boolean[]>(
-    new Array(TRAILERS.length).fill(false)
-  );
+  const [firstVideoReady, setFirstVideoReady] = useState<boolean>(false);
+  const firstVideoReadyRef = useRef<boolean>(firstVideoReady);
+  const listenersMap = useRef<
+    Map<number, { onLoadStart: () => void; onLoadedData: () => void }>
+  >(new Map());
 
-  // Initialize refs and loaded state on mount
-  useEffect(() => {
-    trailerRefs.current = new Array(TRAILERS.length).fill(null);
-    setVideosLoaded(new Array(TRAILERS.length).fill(false));
-
-    return () => {
-      // Cleanup on unmount
-      trailerRefs.current.forEach((video) => {
-        if (!video) return;
-        video.pause();
-        video.removeAttribute("src"); // clear video
-        video.load(); // reset element
-      });
-    };
-  }, []);
-
-  // Handle attaching video refs and setting loaded state
   const handleVideoRef = useCallback(
     (video: HTMLVideoElement | null, index: number) => {
-      if (!video) return;
+      console.log("handleVideoRef called for index", index, "with", video);
+
+      const prevListeners = listenersMap.current.get(index);
+      const prevVideo = trailerRefs.current[index];
+      if (prevVideo && prevListeners) {
+        prevVideo.removeEventListener("loadstart", prevListeners.onLoadStart);
+        prevVideo.removeEventListener("loadeddata", prevListeners.onLoadedData);
+        listenersMap.current.delete(index);
+      }
+
+      if (!video) {
+        trailerRefs.current[index] = null;
+        return;
+      }
 
       trailerRefs.current[index] = video;
 
-      const handleLoadedData = () => {
-        setVideosLoaded((prev) => {
-          if (!prev[index]) {
-            const copy = [...prev];
-            copy[index] = true;
-            return copy;
-          }
-          return prev;
-        });
+      const onLoadStart = () => {
+        console.log(`Video ${index} is downloading`);
       };
 
-      const handleLoadStart = () => {
-        setVideosLoaded((prev) => {
-          if (prev[index]) {
-            const copy = [...prev];
-            copy[index] = false;
-            return copy;
-          }
-          return prev;
-        });
+      const onLoadedData = () => {
+        console.log(`video ${index}: download complete`);
+        console.log("LOADEDDATA fired for index", index);
+
+        if (index === 0) {
+          setFirstVideoReady(true);
+        }
       };
 
-      video.addEventListener("loadeddata", handleLoadedData);
-      video.addEventListener("loadstart", handleLoadStart);
+      video.addEventListener("loadstart", onLoadStart);
+      video.addEventListener("loadeddata", onLoadedData);
+      listenersMap.current.set(index, { onLoadStart, onLoadedData });
 
-      // Handle cached videos (back navigation)
-      if (video.readyState >= 2) {
-        handleLoadedData();
-      }
-
-      // Cleanup listeners when component unmounts
       return () => {
-        video.removeEventListener("loadeddata", handleLoadedData);
-        video.removeEventListener("loadstart", handleLoadStart);
+        console.log("cleaning up listeners for index", index);
+        video.removeEventListener("loadeddata", onLoadedData);
       };
     },
     []
   );
 
-  // Play the current slide only
-  const handlePlay = useCallback(() => {
-    if (!api) return;
+  useEffect(() => {
+    firstVideoReadyRef.current = firstVideoReady;
+  }, [firstVideoReady]);
 
-    const currentIndex = api.selectedScrollSnap();
-
-    trailerRefs.current.forEach((trailer, i) => {
-      if (!trailer) return;
-
-      if (currentIndex === i && videosLoaded[i]) {
-        trailer.play().catch(() => {});
-      } else {
-        trailer.pause();
-        trailer.currentTime = 0;
-      }
-    });
-  }, [api, videosLoaded]);
-
-  // Run handlePlay when carousel changes
   useEffect(() => {
     if (!api) return;
 
-    handlePlay(); // play initial slide
+    const handlePlay = () => {
+      if (!firstVideoReadyRef.current) return;
+
+      const currentCarouselIndex = api.selectedScrollSnap();
+      trailerRefs.current.forEach((video, index) => {
+        if (!video) return;
+        if (currentCarouselIndex === index) {
+          const p = video.play();
+          if (p && typeof p.catch === "function") p.catch(() => {});
+        } else {
+          video.pause();
+          video.currentTime = 0;
+        }
+      });
+    };
+
     api.on("select", handlePlay);
 
-    // Cleanup function
-    return () => {
-      api.off("select", handlePlay); // wrapped in void-returning function
-    };
-  }, [api, handlePlay]);
+    handlePlay();
 
-  // Mute/unmute videos
+    return () => {
+      api.off("select", handlePlay);
+    };
+  }, [api]);
+
+  useEffect(() => {
+    if (!api) return;
+    if (!firstVideoReady) return;
+
+    const current = api.selectedScrollSnap();
+    trailerRefs.current.forEach((video, index) => {
+      if (!video) return;
+      if (index === current) {
+        const p = video.play();
+        if (p && typeof p.catch === "function") p.catch(() => {});
+      } else {
+        video.pause();
+        video.currentTime = 0;
+      }
+    });
+  }, [firstVideoReady, api]);
+
   useEffect(() => {
     trailerRefs.current.forEach((video) => {
-      if (video) video.muted = isMuted;
+      if (video) {
+        video.load();
+      }
     });
-  }, [isMuted]);
+
+    return () => {
+      trailerRefs.current.forEach((video, index) => {
+        const handlers = listenersMap.current.get(index);
+        if (video && handlers) {
+          video.removeEventListener("loadstart", handlers.onLoadStart);
+          video.removeEventListener("loadeddata", handlers.onLoadedData);
+        }
+      });
+      listenersMap.current.clear();
+      trailerRefs.current = [];
+    };
+  }, []);
 
   return (
     <Carousel
@@ -130,7 +145,7 @@ export default function TrailersCarousel() {
         align: "center",
         loop: true,
       }}
-      plugins={[Autoplay({ delay: 60000 })]}
+      plugins={[Autoplay({ delay: 50000 })]}
       className="w-full"
     >
       <CarouselContent className="w-full m-0">
@@ -142,9 +157,9 @@ export default function TrailersCarousel() {
                   <video
                     className="w-full h-auto block relative -top-8 aspect-video"
                     src={trailer.path}
-                    muted={isMuted}
-                    preload="metadata"
+                    preload="auto"
                     playsInline
+                    muted={isMuted}
                     ref={(video) => handleVideoRef(video, index)}
                   />
                 ) : (
