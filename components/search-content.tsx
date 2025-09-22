@@ -61,7 +61,7 @@ export default function SearchContent() {
 
   return (
     <>
-      <section className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-5 gap-y-10 gap-x-5 m-10">
+      <section className="grid grid-cols-2 gap-x-2 sm:gap-x-10 min-[970px]:grid-cols-3 min-[1320px]:grid-cols-4 gap-y-10 mx-2.5 mt-4 min-[640px]:mx-auto min-[1700px]:grid-cols-5">
         {allMovies.map((movie: TMDBGroupResourceListItem, index) => (
           <MovieCard
             resourceID={movie.id}

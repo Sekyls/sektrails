@@ -8,18 +8,14 @@ export default function WatchTrailer({
   name: string | undefined;
   videoKey: string | undefined;
 }) {
-
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button
-          className="text-3xl px-2 font-dancingScript font-bold text-white h-auto py-2"
-          size="lg"
-        >
+        <Button className="w-full sm:w-fit text-xl sm:text-3xl p-5 rounded-sm font-dancingScript font-bold text-white">
           Watch Trailer
         </Button>
       </DialogTrigger>
-      <DialogContent className="max-w-7xl! aspect-video p-0.5 border-primary/30">
+      <DialogContent className="sm:max-w-7xl! aspect-video p-0.5 border-primary/30">
         <iframe
           src={`https://www.youtube.com/embed/${videoKey}`}
           title={name}

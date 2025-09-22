@@ -38,7 +38,7 @@ function CommandInput({
         router.push(`/specialties/search?query=${search}`);
       }}
       data-slot="command-input-wrapper"
-      className="flex items-center gap-2 border rounded-md border-gray-300/40 pl-2"
+      className="flex items-center gap-2 border rounded-md shadow bg-gray-300/20 pl-2"
     >
       <SearchIcon
         onClick={(e) => {

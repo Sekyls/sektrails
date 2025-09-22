@@ -18,7 +18,7 @@ export default function SpecialtiesLayout({
       }
     >
       <AppSidebar variant="inset" />
-      <SidebarInset>
+      <SidebarInset className="overflow-x-hidden">
         <SiteHeader />
         {children}
       </SidebarInset>
