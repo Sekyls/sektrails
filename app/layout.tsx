@@ -5,7 +5,7 @@ import {
   Leckerli_One,
   Dancing_Script,
 } from "next/font/google";
-import "./globals.css";
+import "@/styles/globals.css";
 import "firebaseui/dist/firebaseui.css";
 import TanstackQueryProvider from "@/providers/tanstack-query-provider";
 import { ThemeProvider } from "@/providers/theme-provider";
