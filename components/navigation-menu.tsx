@@ -23,7 +23,7 @@ export default function NavigationMenu() {
       <section className="flex justify-between mx-5 my-2 md:mx-0 md:my-0 md:p-5 sm:gap-x-10 items-center md:grid grid-cols-3 md:justify-start md:gap-x-0 z-50 sm:backdrop-blur-sm">
         <Link
           href={"/"}
-          className="font-leckerli sm:text-4xl hover-underline text-primary w-fit"
+          className="font-leckerli text-2xl sm:text-4xl hover-underline text-primary w-fit"
         >
           Sektrails
         </Link>

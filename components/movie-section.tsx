@@ -27,7 +27,7 @@ export default function MovieSection({
   return (
     <WidthConstraint className="space-y-2">
       <div className="flex justify-between items-center text-primary font-bold mb-3 ">
-        <h4 className="hover-underline tracking-wider">{category}</h4>
+        <h5 className="hover-underline tracking-wider">{category}</h5>
         <Link
           href={seeAllLink || ""}
           className="flex gap-x-1 items-center group"
