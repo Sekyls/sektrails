@@ -189,7 +189,7 @@ export default function TrailersCarousel() {
       <Button
         size={"icon"}
         onClick={() => setIsMuted(!isMuted)}
-        className="absolute text-white size-6 sm:size-10 rounded-full max-[360px]:bottom-1/2 max-[360px]:size-6 max-[492px]:bottom-1/4 bottom-1/5 sm:bottom-1/6 right-0 mr-5 sm:mr-10 bg-transparent border-primary border backdrop-blur-2xl focus:ring-0"
+        className="absolute text-white size-6 sm:size-10 rounded-full max-[360px]:bottom-1/2 max-[360px]:size-6 max-[492px]:bottom-1/3 bottom-1/5 sm:bottom-1/6 right-0 mr-5 sm:mr-10 bg-transparent border-primary border backdrop-blur-2xl focus:ring-0"
       >
         {isMuted ? <VolumeOff /> : <Volume2 />}
       </Button>
