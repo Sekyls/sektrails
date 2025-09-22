@@ -1,5 +1,4 @@
 "use client";
-import NavigationBar from "@/components/navigation-menu";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -71,6 +70,7 @@ import {
 import Autoplay from "embla-carousel-autoplay";
 import ShareResource from "@/components/share-resource";
 import WatchTrailer from "@/components/watch-trailer";
+import NavigationMenu from "@/components/navigation-menu";
 
 function ResourceData({ meta }: { meta: TMDBResourceWithExtras }) {
   const { user } = useAuth();
@@ -79,7 +79,7 @@ function ResourceData({ meta }: { meta: TMDBResourceWithExtras }) {
   );
   return (
     <section className="mb-20 overflow-x-hidden">
-      <Card className={cn("p-0 overflow-x-hidden")}>
+      <Card className={cn("p-0 overflow-x-hidden rounded-t-none")}>
         <CardContent className="p-0 relative">
           <Image
             src={
@@ -93,29 +93,28 @@ function ResourceData({ meta }: { meta: TMDBResourceWithExtras }) {
             height={720}
             priority
           />
-          <WidthConstraint className="hidden sm:block absolute bottom-1/12 ml-60 space-y-5">
-            <h1 className="text-primary font tracking-widest hover-underline">
+          <WidthConstraint className="absolute -bottom-10 sm:bottom-1/12 space-y-5 flex flex-col right-0 left-0 items-center">
+            <h1 className="text-primary font tracking-widest hover-underline w-fit">
               {meta.title}
             </h1>
-            {trailer ? (
-              <WatchTrailer videoKey={trailer.key} name={trailer.name} />
-            ) : (
-              <Button
-                className="text-3xl px-2 font-dancingScript font-bold h-auto py-2"
-                size="lg"
-                disabled
-              >
-                No trailer available
-              </Button>
-            )}
+            <div className="hidden sm:block">
+              {trailer ? (
+                <WatchTrailer videoKey={trailer.key} name={trailer.name} />
+              ) : (
+                <Button
+                  className="w-full sm:w-fit text-xl sm:text-3xl p-5 rounded-sm font-dancingScript font-bold text-white"
+                  size="lg"
+                  disabled
+                >
+                  No trailer available
+                </Button>
+              )}
+            </div>
           </WidthConstraint>
         </CardContent>
         <WidthConstraint>
           <CardFooter className="block space-y-5 px-0 sm:px-6">
             <article className="sm:hidden space-y-2">
-              <h3 className="text-primary font-black tracking-wider">
-                {meta.title}
-              </h3>
               {trailer ? (
                 <div className="grid grid-cols-[2fr_1fr]">
                   <WatchTrailer videoKey={trailer.key} name={trailer.name} />
@@ -518,7 +517,7 @@ function SimilarMovies({ similar }: { similar: TMDBSimilarResponse }) {
       <h3 className="font-dancingScript! font-bold mb-5 md:pb-2 text-center">
         Similar Movies For You
       </h3>
-      <div className="grid grid-cols-2 gap-x-2 sm:gap-x-10 min-[970px]:grid-cols-3 min-[1320px]:grid-cols-4 gap-y-10">
+      <div className="grid grid-cols-2 gap-x-2 sm:gap-x-10 min-[970px]:grid-cols-3 min-[1320px]:grid-cols-4 gap-y-10 min-[1700px]:grid-cols-5">
         {similar.results.map((movie, index) => {
           return (
             <MovieCard
@@ -553,7 +552,7 @@ function RecommendedMovies({
       <h3 className="font-dancingScript! font-bold mb-5 md:pb-2 text-center">
         Recommended Movies For You
       </h3>
-      <div className="grid grid-cols-2 gap-x-2 sm:gap-x-10 min-[970px]:grid-cols-3 min-[1320px]:grid-cols-4 gap-y-10">
+      <div className="grid grid-cols-2 gap-x-2 sm:gap-x-10 min-[970px]:grid-cols-3 min-[1320px]:grid-cols-4 gap-y-10 min-[1700px]:grid-cols-5">
         {recommendations.results.map((movie, index) => {
           return (
             <MovieCard
@@ -597,7 +596,7 @@ export default function ResourcePage() {
   return (
     <div className="overflow-x-hidden">
       <header>
-        <NavigationBar />
+        <NavigationMenu />
       </header>
       <ResourceData meta={meta} />
       <main>

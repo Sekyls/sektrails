@@ -11,7 +11,7 @@ export default function WatchTrailer({
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button className="w-full sm:w-fit text-xl sm:text-3xl px-2 font-dancingScript font-bold text-white py-2">
+        <Button className="w-full sm:w-fit text-xl sm:text-3xl p-5 rounded-sm font-dancingScript font-bold text-white">
           Watch Trailer
         </Button>
       </DialogTrigger>

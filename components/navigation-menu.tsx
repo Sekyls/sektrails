@@ -12,16 +12,18 @@ import { useRouter } from "next/navigation";
 import { useAuth } from "@/providers/firebase-auth-provider";
 import UserAvatar from "./user-avatar";
 
-const NavigationMenu = ({ isOpen, setIsOpen, user, loading }: NavProps) => {
+export default function NavigationMenu() {
   const router = useRouter();
   const [search, setSearch] = useState<string>();
+  const { loading, user } = useAuth();
+  const [isOpen, setIsOpen] = useState<boolean>(false);
 
   return (
-    <>
-      <section className="flex justify-between mx-5 my-2 md:mx-0 md:my-0 md:p-5 sm:gap-x-10 items-center md:grid grid-cols-3 md:justify-start md:gap-x-0 z-50">
+    <nav className="fixed w-full top-0 navBar z-50 backdrop-blur-sm sm:backdrop-blur-none">
+      <section className="flex justify-between mx-5 my-2 md:mx-0 md:my-0 md:p-5 sm:gap-x-10 items-center md:grid grid-cols-3 md:justify-start md:gap-x-0 z-50 sm:backdrop-blur-sm">
         <Link
           href={"/"}
-          className="font-leckerli sm:text-4xl hover-underline text-primary"
+          className="font-leckerli sm:text-4xl hover-underline text-primary w-fit"
         >
           Sektrails
         </Link>
@@ -30,7 +32,7 @@ const NavigationMenu = ({ isOpen, setIsOpen, user, loading }: NavProps) => {
             e.preventDefault();
             router.push(`/specialties/search?query=${search}`);
           }}
-          className="hidden md:flex justify-center gap-x-2 items-center rounded-sm border border-input pl-2 search-input text-background"
+          className="hidden md:flex justify-center gap-x-2 items-center rounded-sm border border-input pl-2 search-input text-background backdrop-blur-2xl"
         >
           <Search
             className="text-primary hover:text-green-500"
@@ -42,7 +44,7 @@ const NavigationMenu = ({ isOpen, setIsOpen, user, loading }: NavProps) => {
           />
           <Input
             placeholder="Search for a movie..."
-            className="border-transparent focus-visible:border-0 focus-visible:ring-0 placeholder:font-bold placeholder:text-foreground rounded-sm text-primary"
+            className="border-transparent focus-visible:border-0 focus-visible:ring-0 placeholder:font-bold rounded-sm text-primary placeholder:text-black/40"
             value={search}
             onChange={(e) => {
               setSearch(e.target.value);
@@ -50,7 +52,7 @@ const NavigationMenu = ({ isOpen, setIsOpen, user, loading }: NavProps) => {
             autoComplete="on"
           />
         </form>
-        <div className="flex justify-center gap-x-5 items-center">
+        <div className="flex justify-center gap-x-5 items-center ml-auto">
           <UserAvatar
             user={user}
             loading={loading}
@@ -86,9 +88,9 @@ const NavigationMenu = ({ isOpen, setIsOpen, user, loading }: NavProps) => {
         user={user}
         loading={loading}
       />
-    </>
+    </nav>
   );
-};
+}
 
 const NavigationMobile = ({ isOpen, user, loading }: MobileNavProps) => {
   const router = useRouter();
@@ -96,7 +98,7 @@ const NavigationMobile = ({ isOpen, user, loading }: MobileNavProps) => {
   return (
     <section
       className={cn(
-        "overflow-hidden transition-all ease-in-out duration-1000 -z-40 mx-5",
+        "overflow-hidden transition-discrete ease-linear duration-700 z-40 mx-5",
         isOpen === false
           ? "max-h-0 opacity-0"
           : "max-h-96 opacity-100 backdrop-blur-2xl rounded-md"
@@ -105,7 +107,7 @@ const NavigationMobile = ({ isOpen, user, loading }: MobileNavProps) => {
       <Command className="bg-transparent rounded-lg space-y-3 pb-2">
         <CommandInput
           placeholder="Search for a movie..."
-          className="placeholder:font-medium"
+          className="placeholder:font-medium text-white font-bold text-shadow-2xs text-shadow-black/80 placeholder:text-white"
         />
         <div className="flex gap-5 pl-2">
           <UserAvatar
@@ -129,18 +131,3 @@ const NavigationMobile = ({ isOpen, user, loading }: MobileNavProps) => {
     </section>
   );
 };
-
-export default function NavigationBar() {
-  const { loading, user } = useAuth();
-  const [isOpen, setIsOpen] = useState<boolean>(false);
-  return (
-    <nav className="fixed w-full top-0 navBar z-50">
-      <NavigationMenu
-        isOpen={isOpen}
-        setIsOpen={setIsOpen}
-        user={user}
-        loading={loading}
-      />
-    </nav>
-  );
-}
