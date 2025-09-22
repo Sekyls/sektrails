@@ -73,7 +73,7 @@ export default function MoreForYou() {
                   />
                 </CardContent>
                 <CardFooter className="absolute bottom-0 left-0 right-0 sm:bottom-20 flex-col justify-center items-center font-black space-y-2">
-                  <h3 className="text-shadow-md tracking-wider text-shadow-primary text-center">
+                  <h3 className="text-shadow-md tracking-wider text-shadow-primary text-center text-white">
                     {movie.title || movie.name}
                   </h3>
                   <p className="hidden sm:block max-w-1/2 text-center  text-white backdrop-blur-xs rounded-2xl font-bold truncate">
