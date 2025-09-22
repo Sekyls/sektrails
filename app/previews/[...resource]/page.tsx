@@ -315,7 +315,10 @@ function ResourceReviews({ mediaType, resourceID }: ReviewsProps) {
           <CarouselContent>
             {reviews.map((review, index) => {
               return (
-                <CarouselItem className="basis-1/4" key={index}>
+                <CarouselItem
+                  className=" sm:basis-1/2 md:basis-1/3 lg:basis-1/4"
+                  key={index}
+                >
                   <Card className="max-w-sm p-2 space-y-2.5 block rounded-md bg-primary/80 text-white dark:bg-transparent">
                     <div className="flex items-center gap-x-5">
                       <Avatar>
