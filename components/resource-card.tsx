@@ -34,7 +34,7 @@ export default function MovieCard({
         <Image
           src={image}
           alt={imgAlt}
-          className="rounded-2xl aspect-[2/3]"
+          className="rounded-2xl aspect-[2/3] object-cover w-full"
           width={500}
           height={750}
         />
