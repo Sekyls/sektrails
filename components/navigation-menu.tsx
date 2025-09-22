@@ -44,7 +44,7 @@ export default function NavigationMenu() {
           />
           <Input
             placeholder="Search for a movie..."
-            className="border-transparent focus-visible:border-0 focus-visible:ring-0 placeholder:font-bold rounded-sm text-primary placeholder:text-black/40"
+            className="border-transparent focus-visible:border-0 focus-visible:ring-0 placeholder:font-bold rounded-sm text-primary placeholder:text-black/40 dark:placeholder:text-white/70"
             value={search}
             onChange={(e) => {
               setSearch(e.target.value);

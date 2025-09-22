@@ -14,7 +14,7 @@ const Home = () => {
       <header>
         <NavigationMenu />
       </header>
-      <main>
+      <main className="mt-10 sm:mt-0">
         <TrailersCarousel />
         <article className="space-y-20">
           {MOVIE_SECTIONS.map((category, index) => {

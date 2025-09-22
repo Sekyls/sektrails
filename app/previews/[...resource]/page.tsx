@@ -93,11 +93,12 @@ function ResourceData({ meta }: { meta: TMDBResourceWithExtras }) {
             height={720}
             priority
           />
-          <WidthConstraint className="absolute -bottom-10 sm:bottom-1/12 space-y-5 flex flex-col right-0 left-0 items-center">
-            <h1 className="text-primary font tracking-widest hover-underline w-fit">
+
+          <WidthConstraint className="absolute bottom-0 sm:bottom-1/12 space-y-5  flex-col right-0 left-0 items-center">
+            <h3 className="font tracking-widest hover-underline w-fit text-shadow-md text-shadow-primary text-center max-[587px]:text-lg!">
               {meta.title}
-            </h1>
-            <div className="hidden sm:block">
+            </h3>
+            <div className="hidden sm:flex">
               {trailer ? (
                 <WatchTrailer videoKey={trailer.key} name={trailer.name} />
               ) : (
@@ -118,7 +119,7 @@ function ResourceData({ meta }: { meta: TMDBResourceWithExtras }) {
               {trailer ? (
                 <div className="grid grid-cols-[2fr_1fr]">
                   <WatchTrailer videoKey={trailer.key} name={trailer.name} />
-                  <div className="flex gap-5 mt-2 justify-center text-primary sm:hidden">
+                  <div className="flex gap-5 mt-2 justify-center text-primary sm:hidden ml-auto">
                     <Bookmark resource={meta} user={user} />
                     <ShareResource
                       poster_path={meta.poster_path}
@@ -149,8 +150,8 @@ function ResourceData({ meta }: { meta: TMDBResourceWithExtras }) {
               )}
             </article>
             <article className="flex justify-between">
-              <div className="flex gap-2.5 flex-wrap sm:gap-x-5">
-                <div className=" px-3 sm:w-30 flex text-lg items-center justify-center bg-primary rounded-md text-white font-black sm:text-2xl">
+              <div className="flex gap-5 sm:gap-x-5 ">
+                <div className="px-10 sm:px-2  sm:w-30 flex text-lg items-center justify-center bg-primary rounded-md text-white font-black sm:text-2xl">
                   {meta.vote_average.toFixed(1)}
                 </div>
                 <div className="space-y-2 font-bold">
