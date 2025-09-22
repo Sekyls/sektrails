@@ -1,4 +1,5 @@
 import "@/styles/animations.css";
+import Link from "next/link";
 
 export default function Animation() {
   return (
@@ -46,10 +47,12 @@ export default function Animation() {
         id="container"
         className="text-[36px] font-bold uppercase text-[#999]"
       >
-        <h1 className="font-dancingScript! max-[500px]:text-4xl!">
-          {" "}
-          SEKTRAILS{" "}
-        </h1>
+        <Link
+          href={"/"}
+          className="font-dancingScript! max-[500px]:text-4xl min-[501px]:text-7xl block hover:cursor-pointer"
+        >
+          SEKTRAILS
+        </Link>
         <div
           id="flip"
           className="h-[50px] overflow-hidden inline-block align-middle"
