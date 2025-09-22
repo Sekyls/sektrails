@@ -170,7 +170,7 @@ export default function TrailersCarousel() {
                     Missing trailer
                   </div>
                 )}
-                <figcaption className="absolute bottom-1/6 max-[492px]:bottom-1/4 max-[317px]:hidden text-center">
+                <figcaption className="absolute bottom-1/6 max-[492px]:bottom-1/3 max-[317px]:hidden text-center">
                   <h3 className="text-primary max-[492px]:text-base!">
                     {trailer.title}
                   </h3>
