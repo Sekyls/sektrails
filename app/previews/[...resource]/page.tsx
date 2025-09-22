@@ -95,7 +95,7 @@ function ResourceData({ meta }: { meta: TMDBResourceWithExtras }) {
           />
 
           <WidthConstraint className="absolute bottom-0 sm:bottom-1/12 space-y-5  flex-col right-0 left-0 items-center">
-            <h3 className="font tracking-widest hover-underline w-fit text-shadow-md text-shadow-primary text-center max-[587px]:text-lg!">
+            <h3 className="tracking-widest hover-underline w-fit text-shadow-md text-shadow-primary text-center max-[587px]:text-lg! text-white">
               {meta.title}
             </h3>
             <div className="hidden sm:flex">
