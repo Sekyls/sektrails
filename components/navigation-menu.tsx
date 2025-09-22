@@ -70,7 +70,7 @@ const NavigationMenu = ({ isOpen, setIsOpen, user, loading }: NavProps) => {
             />
 
             <Button
-              className="text-foreground tracking-wider text-lg rounded-sm hover:bg-primary/50 font-dancingScript hidden md:block"
+              className="text-foreground tracking-wider text-lg rounded-sm hover:bg-primary/50 font-dancingScript hidden md:flex"
               onClick={() => {
                 router.replace("/specialties/movie/popular");
               }}

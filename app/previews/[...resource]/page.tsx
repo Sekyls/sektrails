@@ -78,8 +78,8 @@ function ResourceData({ meta }: { meta: TMDBResourceWithExtras }) {
     (v) => v.site === "YouTube" && v.type === "Trailer"
   );
   return (
-    <section className="mb-20">
-      <Card className={cn("p-0")}>
+    <section className="mb-20 overflow-x-hidden">
+      <Card className={cn("p-0 overflow-x-hidden")}>
         <CardContent className="p-0 relative">
           <Image
             src={
@@ -93,7 +93,7 @@ function ResourceData({ meta }: { meta: TMDBResourceWithExtras }) {
             height={720}
             priority
           />
-          <WidthConstraint className="absolute bottom-1/12 ml-60 space-y-5">
+          <WidthConstraint className="hidden sm:block absolute bottom-1/12 ml-60 space-y-5">
             <h1 className="text-primary font tracking-widest hover-underline">
               {meta.title}
             </h1>
@@ -111,10 +111,47 @@ function ResourceData({ meta }: { meta: TMDBResourceWithExtras }) {
           </WidthConstraint>
         </CardContent>
         <WidthConstraint>
-          <CardFooter className="block space-y-5">
+          <CardFooter className="block space-y-5 px-0 sm:px-6">
+            <article className="sm:hidden space-y-2">
+              <h3 className="text-primary font-black tracking-wider">
+                {meta.title}
+              </h3>
+              {trailer ? (
+                <div className="grid grid-cols-[2fr_1fr]">
+                  <WatchTrailer videoKey={trailer.key} name={trailer.name} />
+                  <div className="flex gap-5 mt-2 justify-center text-primary sm:hidden">
+                    <Bookmark resource={meta} user={user} />
+                    <ShareResource
+                      poster_path={meta.poster_path}
+                      overview={meta.overview}
+                      name={meta.name}
+                      title={meta.title}
+                    />
+                  </div>
+                </div>
+              ) : (
+                <div className="grid grid-cols-2">
+                  <Button
+                    className="w-full sm:w-fit text-xl sm:text-3xl px-2 font-dancingScript font-bold text-white py-2"
+                    disabled
+                  >
+                    No trailer available
+                  </Button>
+                  <div className="flex gap-5 mt-2 justify-center sm:hidden">
+                    <Bookmark resource={meta} user={user} />
+                    <ShareResource
+                      poster_path={meta.poster_path}
+                      overview={meta.overview}
+                      name={meta.name}
+                      title={meta.title}
+                    />
+                  </div>
+                </div>
+              )}
+            </article>
             <article className="flex justify-between">
-              <div className="flex gap-x-5">
-                <div className="w-30 flex items-center justify-center bg-primary rounded-md text-white font-black text-2xl">
+              <div className="flex gap-2.5 flex-wrap sm:gap-x-5">
+                <div className=" px-3 sm:w-30 flex text-lg items-center justify-center bg-primary rounded-md text-white font-black sm:text-2xl">
                   {meta.vote_average.toFixed(1)}
                 </div>
                 <div className="space-y-2 font-bold">
@@ -157,7 +194,7 @@ function ResourceData({ meta }: { meta: TMDBResourceWithExtras }) {
                   </p>
                 </div>
               </div>
-              <div className="flex gap-x-5 items-center justify-end">
+              <div className="hidden sm:flex gap-x-5 items-center justify-end">
                 <div className="flex gap-x-1 text-primary font-semibold items-center justify-center">
                   <p className="text-foreground">Bookmark</p>
                   <Bookmark resource={meta} user={user} />
@@ -412,7 +449,7 @@ function ResourceCasts({ credits }: { credits: TMDBCreditsResponse }) {
   return (
     <section className="text-center">
       <h3 className="font-dancingScript! font-bold pb-2">Movie Casts</h3>
-      <div className="grid grid-cols-4 gap-x-5 gap-y-10">
+      <div className="hidden md:grid md:grid-cols-3 xl:grid-cols-4 gap-x-5 gap-y-10">
         {credits.cast.map((cast, index) => {
           return (
             <Card className={cn("border-0 p-0")} key={index}>
@@ -439,6 +476,37 @@ function ResourceCasts({ credits }: { credits: TMDBCreditsResponse }) {
           );
         })}
       </div>
+      <Carousel className="md:hidden">
+        <CarouselContent>
+          {credits.cast.map((cast, index) => {
+            return (
+              <CarouselItem key={index} className="max-w-2xs">
+                <Card className={cn("border-0 p-0 max-w-2xs h-full")}>
+                  <CardContent className="p-0">
+                    <Image
+                      src={
+                        cast.profile_path
+                          ? "https://image.tmdb.org/t/p/original" +
+                            cast.profile_path
+                          : "/fallback.jpg"
+                      }
+                      alt={cast.name || "N/A"}
+                      className="aspect-[2/3] rounded-2xl"
+                      width={500}
+                      height={750}
+                    />
+                  </CardContent>
+                  <CardFooter className="grid grid-cols-3 text-center font-semibold pl-0 pb-2 pr-1">
+                    <p>{cast.name}</p>
+                    <p className="text-primary font-bold">As</p>
+                    <p>{cast.character}</p>
+                  </CardFooter>
+                </Card>
+              </CarouselItem>
+            );
+          })}
+        </CarouselContent>
+      </Carousel>
     </section>
   );
 }
@@ -447,10 +515,10 @@ function SimilarMovies({ similar }: { similar: TMDBSimilarResponse }) {
   const { user } = useAuth();
   return (
     <section>
-      <h3 className="font-dancingScript! font-bold pb-2 text-center">
+      <h3 className="font-dancingScript! font-bold mb-5 md:pb-2 text-center">
         Similar Movies For You
       </h3>
-      <div className="grid grid-cols-5 gap-y-10">
+      <div className="grid grid-cols-2 gap-x-2 sm:gap-x-10 min-[970px]:grid-cols-3 min-[1320px]:grid-cols-4 gap-y-10">
         {similar.results.map((movie, index) => {
           return (
             <MovieCard
@@ -482,10 +550,10 @@ function RecommendedMovies({
   const { user } = useAuth();
   return (
     <section>
-      <h3 className="font-dancingScript! font-bold pb-2 text-center">
+      <h3 className="font-dancingScript! font-bold mb-5 md:pb-2 text-center">
         Recommended Movies For You
       </h3>
-      <div className="grid grid-cols-5 space-y-10">
+      <div className="grid grid-cols-2 gap-x-2 sm:gap-x-10 min-[970px]:grid-cols-3 min-[1320px]:grid-cols-4 gap-y-10">
         {recommendations.results.map((movie, index) => {
           return (
             <MovieCard
@@ -527,7 +595,7 @@ export default function ResourcePage() {
   }
   const { credits, similar, recommendations, ...meta } = data!;
   return (
-    <>
+    <div className="overflow-x-hidden">
       <header>
         <NavigationBar />
       </header>
@@ -546,6 +614,6 @@ export default function ResourcePage() {
       <footer className="w-full mt-45 space-y-10 pb-8 bg-primary text-white pt-10">
         <Footer />
       </footer>
-    </>
+    </div>
   );
 }

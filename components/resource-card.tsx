@@ -22,7 +22,7 @@ export default function MovieCard({
   return (
     <Card
       className={cn(
-        "max-w-2xs w-fit max-h-[465px] overflow-hidden p-0 sm:p-1.5 rounded-3xl gap-2 sm:bg-primary text-white sm:border-0 border border-primary sm:outline-0 font-medium"
+        "max-w-2xs w-fit max-h-[465px] overflow-hidden p-0 sm:p-1.5 sm:rounded-3xl gap-2 sm:bg-primary text-white sm:border-0 border border-primary sm:outline-0 font-medium"
       )}
     >
       <CardContent
