@@ -13,10 +13,12 @@ export default function SearchContent() {
   const [page, setPage] = useState(1);
   const [allMovies, setAllMovies] = useState<TMDBGroupResourceListItem[]>([]);
   const search = searchParams.get("query");
-  const resourceUrl = `search/multi?query=${search}` as TMDBApiPaths;
+  const resourceUrl = `search/multi?query=${
+    !search ? "A" : search
+  }` as TMDBApiPaths;
 
   const { resource, isLoading, totalPages } = useFetchTMDBResource(
-    search,
+    !search ? "A" : search,
     resourceUrl,
     page,
     { page: page }
@@ -34,7 +36,6 @@ export default function SearchContent() {
   const loadMoreRef = useRef<HTMLDivElement | null>(null);
   useEffect(() => {
     if (!loadMoreRef.current) return;
-
     const observer = new IntersectionObserver(
       (entries) => {
         const first = entries[0];
