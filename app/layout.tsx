@@ -75,10 +75,10 @@ export const metadata: Metadata = {
   },
   keywords: [
     "Movies",
-    "TV Shows",
+    "TV",
     "Series",
     "Action",
-    "adventure",
+    "Shows",
     "trailer",
     "preview",
     "cast",
