@@ -87,6 +87,7 @@ export default function BookmarksPage() {
             resource={movie}
             user={user}
             bookmarked
+            setDocs={setDocs}
           />
         ))}
       </section>

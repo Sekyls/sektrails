@@ -59,6 +59,7 @@ export type MovieCardProps = {
   image: string;
   imgAlt: string;
   bookmarked?: boolean;
+  setDocs?: React.Dispatch<React.SetStateAction<TMDBGroupResourceListItem[]>>;
 };
 
 export type AddBookmark = {
