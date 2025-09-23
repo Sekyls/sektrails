@@ -11,6 +11,7 @@ import { useRouter } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { useEffect, useState } from "react";
 import { getPageTitle } from "@/lib/page-title";
+import { logOut } from "@/lib/sign-out";
 
 export function SiteHeader() {
   const router = useRouter();
@@ -85,7 +86,8 @@ export function SiteHeader() {
           )}
           size={"lg"}
           onClick={() => {
-            router.replace("");
+            logOut();
+            router.replace("/");
           }}
         >
           Sign out

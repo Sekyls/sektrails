@@ -12,6 +12,7 @@ import {
 import { Button } from "./ui/button";
 import { useRouter } from "next/navigation";
 import { cn } from "@/lib/utils";
+import { logOut } from "@/lib/sign-out";
 
 export default function UserAvatar({
   user,
@@ -42,7 +43,7 @@ export default function UserAvatar({
         )}
       </DropdownMenuTrigger>
       <DropdownMenuContent
-        className="w-(--radix-dropdown-menu-trigger-width) rounded-lg px-3 py-1 space-y-1 border-0 bg-background/70"
+        className="rounded-lg px-3 py-1 space-y-1 border-0 bg-background/30"
         align={align}
         sideOffset={sideOffset}
       >
@@ -57,7 +58,13 @@ export default function UserAvatar({
             </DropdownMenuItem>
             <DropdownMenuSeparator />
             <DropdownMenuItem asChild>
-              <Button className=" flex gap-x-2 w-full justify-center items-center text-foreground bg-red-700 hover:bg-red-400">
+              <Button
+                onClick={() => {
+                  logOut();
+                  router.replace("/");
+                }}
+                className="flex gap-x-2 w-full justify-center items-center text-foreground bg-red-700 hover:bg-red-400"
+              >
                 Log out
                 <IconLogout color="white" />
               </Button>
