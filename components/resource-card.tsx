@@ -6,6 +6,9 @@ import { useRouter } from "next/navigation";
 import Bookmark from "./add-bookmark";
 import { cn } from "@/lib/utils";
 import { BookCheck } from "lucide-react";
+import { toast } from "sonner";
+import { deleteBookmark } from "@/lib/bookmark";
+import { FirebaseError } from "firebase/app";
 
 export default function MovieCard({
   image,
@@ -16,6 +19,7 @@ export default function MovieCard({
   resource,
   user,
   bookmarked,
+  setDocs,
 }: BookmarkResource) {
   const router = useRouter();
 
@@ -42,7 +46,41 @@ export default function MovieCard({
       <CardFooter className="sm:flex justify-between px-3 pb-1 hidden">
         <p className="truncate w-50">{title}</p>
         {!bookmarked && <Bookmark user={user} resource={resource} />}
-        {bookmarked && <BookCheck />}
+        {bookmarked && (
+          <BookCheck
+            className="text-green-500 hover:scale-110 hover:text-white hover:fill-red-500 transition-all duration-300 ease-in-out"
+            onClick={() => {
+              toast.promise(
+                (async () => {
+                  const { id, title } = await deleteBookmark(user, resource);
+                  setDocs?.((prev) =>
+                    prev.filter((resource) => resource.id !== id)
+                  );
+                  return title;
+                })(),
+                {
+                  loading: "Removing bookmark...",
+                  success: (title) => ({
+                    message: `${title} removed successfully`,
+                    action: {
+                      label: "Success!",
+                      onClick: () => {},
+                    },
+                    classNames: { actionButton: "bg-green-700! text-white!" },
+                  }),
+                  error: (error: FirebaseError | Error) => ({
+                    message: error.message,
+                    action: {
+                      label: "Failed!",
+                      onClick: () => {},
+                    },
+                    classNames: { actionButton: "bg-red-700! text-white!" },
+                  }),
+                }
+              );
+            }}
+          />
+        )}
       </CardFooter>
     </Card>
   );

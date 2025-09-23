@@ -1,5 +1,6 @@
 "use client";
 import {
+  deleteDoc,
   doc,
   DocumentData,
   QueryDocumentSnapshot,
@@ -76,4 +77,21 @@ export async function getPagedBookmarks(
     docs: snapshot.docs.map((doc) => doc.data() as TMDBGroupResourceListItem),
     lastDoc: snapshot.docs[snapshot.docs.length - 1] ?? null,
   };
+}
+
+export async function deleteBookmark(
+  user: User | null,
+  resource:
+    | TMDBGroupResourceListItem
+    | TMDBResourceWithExtras
+    | TMDBRecommendation
+) {
+  if (user === null || !resource) {
+    throw new Error("User or Resource could not be found");
+  }
+
+  const { id, name, title } = resource;
+  const ref = doc(db, "users", user.uid, "bookmarks", id.toString());
+  await deleteDoc(ref);
+  return { id, title: name ?? title ?? "Bookmark" };
 }
