@@ -45,7 +45,7 @@ export default function Footer() {
                 <div key={index} className="sm:ml-auto">
                   <h3 className="hover-underline">{col.header}</h3>
                   {col.links.map((link, locus) => {
-                    return (
+                    return link.type === 0 ? (
                       <Link
                         href={link.sublink}
                         key={locus}
@@ -53,6 +53,16 @@ export default function Footer() {
                       >
                         {link.title}
                       </Link>
+                    ) : (
+                      <a
+                        href={link.sublink}
+                        key={locus}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="block my-5"
+                      >
+                        {link.title}
+                      </a>
                     );
                   })}
                 </div>
