@@ -64,7 +64,7 @@ export default function Bookmark({ user, resource, className }: AddBookmark) {
           handleAddBookmark();
         }}
         size={"icon"}
-        className=" sm:hidden size-6 bg-primary rounded-sm z-50"
+        className=" sm:hidden size-6 bg-green-500 rounded-sm z-50"
       >
         <Bold className={cn("text-white size-4 z-50", className)} />
       </Button>
