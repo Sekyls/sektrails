@@ -1,11 +1,11 @@
 "use client";
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import useFetchTMDBResource from "@/hooks/use-tmdb-fetch";
 import { TMDBApiPaths, TMDBGroupResourceListItem } from "@/lib/types";
-import { Loader2Icon } from "lucide-react";
 import { useAuth } from "@/providers/firebase-auth-provider";
-import MovieCard from "@/components/resource-card";
 import { useSearchParams } from "next/navigation";
+import SentinelObserver from "@/components/observers/paging-observer";
+import MovieCard from "./resource-card";
 
 export default function SearchContent() {
   const { user } = useAuth();
@@ -32,28 +32,6 @@ export default function SearchContent() {
       setAllMovies((prev) => [...prev, ...filteredresource]);
     }
   }, [resource]);
-
-  const loadMoreRef = useRef<HTMLDivElement | null>(null);
-  useEffect(() => {
-    if (!loadMoreRef.current) return;
-    const observer = new IntersectionObserver(
-      (entries) => {
-        const first = entries[0];
-        if (first.isIntersecting && !isLoading && page < (totalPages || 999)) {
-          setPage((prev) => prev + 1);
-        }
-      },
-      { threshold: 1 }
-    );
-
-    observer.observe(loadMoreRef.current);
-
-    return () => {
-      if (loadMoreRef.current) {
-        observer.unobserve(loadMoreRef.current);
-      }
-    };
-  }, [isLoading, page, totalPages]);
 
   useEffect(() => {
     setAllMovies([]);
@@ -82,10 +60,12 @@ export default function SearchContent() {
           />
         ))}
       </section>
-      <div ref={loadMoreRef} className="h-12 flex items-center justify-center">
-        {isLoading && <Loader2Icon className="animate-spin text-primary" />}
-        {page >= (totalPages || 999) && <p className="text-primary">Loading</p>}
-      </div>
+      <SentinelObserver
+        isLoading={isLoading}
+        page={page}
+        setPage={setPage}
+        totalPages={totalPages}
+      />
     </>
   );
 }

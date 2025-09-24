@@ -1,5 +1,5 @@
 "use client";
-import Animation from "@/components/animation";
+import Animation from "@/components/miscellaneous/animation";
 import dynamic from "next/dynamic";
 import React from "react";
 

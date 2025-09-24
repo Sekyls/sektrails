@@ -1,5 +1,5 @@
 import React from "react";
-import WidthConstraint from "./ui/width-constraint";
+import WidthConstraint from "../ui/width-constraint";
 import Link from "next/link";
 import Image from "next/image";
 import { FOOTER_LINKS, SOCIAL_LINKS } from "@/lib/constants";

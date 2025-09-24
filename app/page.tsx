@@ -1,14 +1,14 @@
 "use client";
-import Footer from "@/components/footer";
-import MoreForYou from "@/components/more-for-you-banner";
-import MovieSection from "@/components/movie-section";
-import NavigationMenu from "@/components/navigation-menu";
-import TrailersCarousel from "@/components/trailer-carousel";
+import Footer from "@/components/miscellaneous/footer";
+import MoreForYou from "@/components/miscellaneous/more-for-you-banner";
+import MovieSection from "@/components/miscellaneous/movie-section";
+import NavigationMenu from "@/components/miscellaneous/navigation-menu";
+import TrailersCarousel from "@/components/miscellaneous/trailer-carousel";
 import WidthConstraint from "@/components/ui/width-constraint";
 import { MOVIE_SECTIONS, MOVIE_SECTIONS_2 } from "@/lib/constants";
 import React from "react";
 
-const Home = () => {
+export default function Home() {
   return (
     <div className="overflow-x-hidden">
       <header>
@@ -51,6 +51,4 @@ const Home = () => {
       </footer>
     </div>
   );
-};
-
-export default Home;
+}

@@ -1,19 +1,19 @@
 "use client";
 import React from "react";
 import { ArrowRight } from "lucide-react";
+import { MovieSectionsProps } from "@/lib/types";
+import { useAuth } from "@/providers/firebase-auth-provider";
+import MovieCard from "./resource-card";
+import useFetchTMDBResource from "@/hooks/use-tmdb-fetch";
+import WidthConstraint from "../ui/width-constraint";
+import Link from "next/link";
 import {
   Carousel,
   CarouselContent,
   CarouselItem,
   CarouselNext,
   CarouselPrevious,
-} from "./ui/carousel";
-import Link from "next/link";
-import WidthConstraint from "./ui/width-constraint";
-import useFetchTMDBResource from "../hooks/use-tmdb-fetch";
-import { MovieSectionsProps } from "@/lib/types";
-import { useAuth } from "@/providers/firebase-auth-provider";
-import MovieCard from "./resource-card";
+} from "../ui/carousel";
 
 export default function MovieSection({
   category,

@@ -9,7 +9,7 @@ import { Bold, BookCheck } from "lucide-react";
 import { toast } from "sonner";
 import { deleteBookmark } from "@/lib/bookmark";
 import { FirebaseError } from "firebase/app";
-import { Button } from "./ui/button";
+import { Button } from "../ui/button";
 
 export default function MovieCard({
   image,

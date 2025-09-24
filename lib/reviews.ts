@@ -58,3 +58,11 @@ export function getReviews(
   });
   return unsubscribe;
 }
+
+export const handleAddReview = async (reviewFormData: ReviewFormData) => {
+  const result = await addReview(reviewFormData);
+  if (result === false) {
+    throw new Error("You must be logged in");
+  }
+  return "Review added succesfully";
+};

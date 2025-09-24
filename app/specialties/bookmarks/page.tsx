@@ -1,12 +1,11 @@
 "use client";
-
-import { Loader2Icon } from "lucide-react";
 import { useAuth } from "@/providers/firebase-auth-provider";
-import MovieCard from "@/components/resource-card";
 import { getPagedBookmarks } from "@/lib/bookmark";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { TMDBGroupResourceListItem } from "@/lib/types";
 import { DocumentData, QueryDocumentSnapshot } from "firebase/firestore";
+import SentinelRefetchObserver from "@/components/observers/refetch-observer";
+import MovieCard from "@/components/miscellaneous/resource-card";
 
 export default function BookmarksPage() {
   const [docs, setDocs] = useState<TMDBGroupResourceListItem[]>([]);
@@ -14,8 +13,6 @@ export default function BookmarksPage() {
     useState<QueryDocumentSnapshot<DocumentData> | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [isFetchingMore, setIsFetchingMore] = useState<boolean>(false);
-
-  const loaderRef = useRef<HTMLDivElement | null>(null);
   const { user } = useAuth();
 
   useEffect(() => {
@@ -36,38 +33,6 @@ export default function BookmarksPage() {
       }
     })();
   }, [user]);
-
-  useEffect(() => {
-    const node = loaderRef.current;
-    if (!node || !user || !lastDoc) return;
-
-    const observer = new IntersectionObserver(
-      async (entries) => {
-        if (entries[0].isIntersecting && !isFetchingMore) {
-          setIsFetchingMore(true);
-          try {
-            const { docs: newDocs, lastDoc: newLastDoc } =
-              await getPagedBookmarks(user, lastDoc);
-            if (newDocs.length > 0) {
-              setDocs((prev) => [
-                ...prev,
-                ...(newDocs as TMDBGroupResourceListItem[]),
-              ]);
-              setLastDoc(newLastDoc);
-            } else {
-              setLastDoc(null);
-            }
-          } finally {
-            setIsFetchingMore(false);
-          }
-        }
-      },
-      { threshold: 1 }
-    );
-
-    observer.observe(node);
-    return () => observer.unobserve(node);
-  }, [user, lastDoc, isFetchingMore]);
 
   return user ? (
     <>
@@ -91,13 +56,15 @@ export default function BookmarksPage() {
           />
         ))}
       </section>
-      <div ref={loaderRef} className="h-12 flex items-center justify-center">
-        {isLoading && <Loader2Icon className="animate-spin text-primary" />}
-        {isFetchingMore && <p className="text-primary">Loading more…</p>}
-        {!lastDoc && !isLoading && (
-          <p className="text-muted">No more bookmarks</p>
-        )}
-      </div>
+      <SentinelRefetchObserver
+        isFetchingMore={isFetchingMore}
+        isLoading={isLoading}
+        lastDoc={lastDoc}
+        setDocs={setDocs}
+        setIsFetchingMore={setIsFetchingMore}
+        setLastDoc={setLastDoc}
+        user={user}
+      />
     </>
   ) : (
     <p className="flex justify-center items-center h-full font-black text-lg! w-full">

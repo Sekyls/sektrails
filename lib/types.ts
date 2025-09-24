@@ -68,7 +68,7 @@ export type AddBookmark = {
   resource:
     | TMDBGroupResourceListItem
     | TMDBResourceWithExtras
-    | TMDBRecommendation;
+    | TMDBResourceSuggestions;
 };
 
 export type BookmarkResource = MovieCardProps & AddBookmark;
@@ -135,7 +135,7 @@ export type TMDBCreditsResponse = {
   cast: TMDBCast[];
 };
 
-export type TMDBRecommendation = {
+export type TMDBResourceSuggestions = {
   id: number;
   title?: string;
   name?: string;
@@ -143,14 +143,12 @@ export type TMDBRecommendation = {
   media_type?: "movie" | "tv";
 };
 
-export type TMDBRecommendationsResponse = {
+export type TMDBResourceSuggestionsResponse = {
   page: number;
-  results: TMDBRecommendation[];
+  results: TMDBResourceSuggestions[];
   total_pages: number;
   total_results: number;
 };
-
-export type TMDBSimilarResponse = TMDBRecommendationsResponse;
 
 export type TMDBResourceWithExtras = {
   id: number;
@@ -185,8 +183,8 @@ export type TMDBResourceWithExtras = {
   // extras
   videos?: TMDBVideosResponse;
   credits?: TMDBCreditsResponse;
-  recommendations?: TMDBRecommendationsResponse;
-  similar?: TMDBSimilarResponse;
+  recommendations?: TMDBResourceSuggestionsResponse;
+  similar?: TMDBResourceSuggestionsResponse;
 };
 
 export type ReviewFormData = {
@@ -234,4 +232,15 @@ export type ShareFileProps = {
   text: string;
   url: string;
   files: File[];
+};
+
+export type ReviewFormProps = {
+  mediaType: "tv" | "movie";
+  resourceID: number;
+};
+
+export type ToastOptions<T> = {
+  loading?: string;
+  success?: string | ((result: T) => string);
+  error?: string | ((err: Error) => string);
 };
