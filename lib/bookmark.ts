@@ -11,7 +11,7 @@ import { db } from "@/config/firebase";
 import { User } from "firebase/auth";
 import {
   TMDBGroupResourceListItem,
-  TMDBRecommendation,
+  TMDBResourceSuggestions,
   TMDBResourceWithExtras,
 } from "@/lib/types";
 import {
@@ -28,7 +28,7 @@ export async function addBookmark(
   resource:
     | TMDBGroupResourceListItem
     | TMDBResourceWithExtras
-    | TMDBRecommendation
+    | TMDBResourceSuggestions
 ) {
   try {
     if (user === null) {
@@ -84,7 +84,7 @@ export async function deleteBookmark(
   resource:
     | TMDBGroupResourceListItem
     | TMDBResourceWithExtras
-    | TMDBRecommendation
+    | TMDBResourceSuggestions
 ) {
   if (user === null || !resource) {
     throw new Error("User or Resource could not be found");
