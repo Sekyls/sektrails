@@ -139,28 +139,59 @@ export const FOOTER_LINKS = [
   {
     header: "Quick Links",
     links: [
-      { title: "Popular Shows", sublink: "/specialties/tv/popular" },
+      { title: "Popular Shows", sublink: "/specialties/tv/popular", type: 0 },
       {
         title: "Currently In Theaters",
         sublink: "/specialties/movie/now_playing",
+        type: 0,
       },
-      { title: "Upcoming Releases", sublink: "/specialties/movie/upcoming" },
-      { title: "Top Rated Movies", sublink: "/specialties/movie/top_rated" },
-      { title: "Popular Movies", sublink: "/specialties/movie/popular" },
-      { title: "Currently Airing", sublink: "/specialties/tv/on_the_air" },
-      { title: "Top Rated Shows", sublink: "/specialties/tv/top_rated" },
+      {
+        title: "Upcoming Releases",
+        sublink: "/specialties/movie/upcoming",
+        type: 0,
+      },
+      {
+        title: "Top Rated Movies",
+        sublink: "/specialties/movie/top_rated",
+        type: 0,
+      },
+      {
+        title: "Popular Movies",
+        sublink: "/specialties/movie/popular",
+        type: 0,
+      },
+      {
+        title: "Currently Airing",
+        sublink: "/specialties/tv/on_the_air",
+        type: 0,
+      },
+      {
+        title: "Top Rated Shows",
+        sublink: "/specialties/tv/top_rated",
+        type: 0,
+      },
       {
         title: "Trending This Week",
         sublink: "/specialties/trending/all/week",
+        type: 0,
       },
-      { title: "Airing Today", sublink: "/specialties/tv/airing_today" },
+      {
+        title: "Airing Today",
+        sublink: "/specialties/tv/airing_today",
+        type: 0,
+      },
     ],
   },
   {
     header: "About Us",
     links: [
-      { title: "Contact", sublink: "" },
-      { title: "Documentation", sublink: "" },
+      { title: "Contact", sublink: "tel:+233596379243", type: 1 },
+      {
+        title: "Documentation",
+        sublink:
+          "https://developer.themoviedb.org/reference/intro/getting-started",
+        type: 1,
+      },
     ],
   },
 ];
