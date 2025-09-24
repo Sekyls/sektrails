@@ -2,9 +2,10 @@
 import { addBookmark } from "@/lib/bookmark";
 import { AddBookmark } from "@/lib/types";
 import { cn } from "@/lib/utils";
-import { BookmarkPlus } from "lucide-react";
+import { Bold, BookmarkPlus } from "lucide-react";
 import React from "react";
 import { toast } from "sonner";
+import { Button } from "./ui/button";
 
 export default function Bookmark({ user, resource, className }: AddBookmark) {
   const handleAddBookmark = async () => {
@@ -48,11 +49,25 @@ export default function Bookmark({ user, resource, className }: AddBookmark) {
     );
   };
   return (
-    <BookmarkPlus
-      onClick={() => {
-        handleAddBookmark();
-      }}
-      className={cn("hover:scale-110 hover:text-green-300", className)}
-    />
+    <>
+      <BookmarkPlus
+        onClick={() => {
+          handleAddBookmark();
+        }}
+        className={cn(
+          "hidden sm:block hover:scale-110 hover:text-green-300",
+          className
+        )}
+      />
+      <Button
+        onClick={() => {
+          handleAddBookmark();
+        }}
+        size={"icon"}
+        className=" sm:hidden size-6 bg-primary rounded-sm z-50"
+      >
+        <Bold className={cn("text-white size-4 z-50", className)} />
+      </Button>
+    </>
   );
 }
