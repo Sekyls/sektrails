@@ -4,7 +4,6 @@ import { SidebarTrigger } from "@/components/ui/sidebar";
 import { Search } from "lucide-react";
 import { Input } from "../ui/input";
 import { Button } from "../ui/button";
-import { ThemeToggle } from "../theme-toggler";
 import { usePathname } from "next/navigation";
 import { useAuth } from "@/providers/firebase-auth-provider";
 import { useRouter } from "next/navigation";
@@ -12,6 +11,7 @@ import { cn } from "@/lib/utils";
 import { useEffect, useState } from "react";
 import { getPageTitle } from "@/lib/page-title";
 import { logOut } from "@/lib/sign-out";
+import { ThemeToggle } from "../miscellaneous/theme-toggler";
 
 export function SiteHeader() {
   const router = useRouter();

@@ -1,0 +1,94 @@
+import { Metadata } from "next";
+
+export const appMetaData: Metadata = {
+  title: "Sektrails",
+  description: "Movie Preview App",
+  applicationName: "Sektrails",
+  authors: [
+    {
+      name: "Dennis Sekyi Opoku",
+      url: "/",
+    },
+  ],
+  alternates: {
+    canonical: "/",
+  },
+  category: "Movies Preview",
+  creator: "Dennis Sekyi Opoku",
+  publisher: "Dennis Sekyi Opoku",
+  manifest: "/favicons/site.webmanifest",
+  icons: {
+    icon: [
+      { url: "/favicons/favicon-16x16.png", sizes: "16x16", type: "image/png" },
+      { url: "/favicons/favicon-32x32.png", sizes: "32x32", type: "image/png" },
+      {
+        url: "/favicons/android-chrome-192x192.png",
+        sizes: "192x192",
+        type: "image/png",
+      },
+      {
+        url: "/favicons/android-chrome-512x512.png",
+        sizes: "512x512",
+        type: "image/png",
+      },
+    ],
+    apple: "/favicons/apple-touch-icon",
+    shortcut: "/favicons/favicon.ico",
+  },
+  keywords: [
+    "Movies",
+    "TV",
+    "Series",
+    "Action",
+    "Shows",
+    "trailer",
+    "preview",
+    "cast",
+  ],
+  openGraph: {
+    type: "website",
+    url: "/",
+    title: "Sektrails",
+    description: "Movie Preview App",
+    siteName: "Sektrails",
+    locale: "en_GB",
+    emails: ["denipsyp@gmail.com"],
+    phoneNumbers: ["+233203558362"],
+    images: [
+      {
+        url: "",
+        width: 1200,
+        height: 630,
+        alt: "",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    site: "Sektrails",
+    creator: "Dennis Sekyi Opoku",
+    title: "Sektrails",
+    description: "Movie Preview App",
+    images: [
+      {
+        url: "",
+        width: 1200,
+        height: 630,
+        alt: "",
+      },
+    ],
+  },
+  robots: {
+    index: true,
+    follow: true,
+    nocache: false,
+    googleBot: {
+      index: true,
+      follow: true,
+      noimageindex: false,
+      "max-video-preview": -1,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+    },
+  },
+};

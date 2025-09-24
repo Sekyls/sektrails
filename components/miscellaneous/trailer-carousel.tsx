@@ -12,7 +12,7 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "@/components/ui/carousel";
-import { Button } from "./ui/button";
+import { Button } from "../ui/button";
 import { Volume2, VolumeOff } from "lucide-react";
 import BackgroundVideo from "next-video/background-video";
 

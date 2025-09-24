@@ -6,7 +6,7 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "@/components/ui/carousel";
-import { Card, CardContent, CardFooter } from "./ui/card";
+import { Card, CardContent, CardFooter } from "../ui/card";
 import Image from "next/image";
 import { useQuery } from "@tanstack/react-query";
 import { getTMDBResource } from "@/api/tmdb-resources";

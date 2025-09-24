@@ -3,7 +3,7 @@ import { ShareFileProps, ShareResourceProps } from "@/lib/types";
 import { Image, Link, Share } from "lucide-react";
 import React, { useEffect, useState } from "react";
 import { toast } from "sonner";
-import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover";
+import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
 
 export default function ShareResource({
   name,

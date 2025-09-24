@@ -1,13 +1,13 @@
 "use client";
 import { Menu, Search } from "lucide-react";
-import { Button } from "./ui/button";
-import { Input } from "./ui/input";
-import { Command, CommandInput } from "./ui/custom-command";
+import { Button } from "../ui/button";
+import { Input } from "../ui/input";
+import { Command, CommandInput } from "../ui/custom-command";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
 import { ThemeToggle } from "./theme-toggler";
 import { useState } from "react";
-import { MobileNavProps, NavProps } from "@/lib/types";
+import { MobileNavProps } from "@/lib/types";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/providers/firebase-auth-provider";
 import UserAvatar from "./user-avatar";
