@@ -1,22 +1,9 @@
 "use client";
-import { TMDBGroupResourceListItem } from "@/lib/types";
+import { BookmarksSentinelProps, TMDBGroupResourceListItem } from "@/lib/types";
 import { Loader2Icon } from "lucide-react";
-import React, { SetStateAction, useEffect, useRef } from "react";
-import { User } from "firebase/auth";
-import type { DocumentData, QueryDocumentSnapshot } from "firebase/firestore";
+import React, { useEffect, useRef } from "react";
 import { getPagedBookmarks } from "@/lib/bookmark";
 
-type BookmarksSentinelProps = {
-  user: User | null;
-  lastDoc: QueryDocumentSnapshot<DocumentData> | null;
-  isFetchingMore: boolean;
-  isLoading: boolean;
-  setIsFetchingMore: React.Dispatch<React.SetStateAction<boolean>>;
-  setDocs: React.Dispatch<SetStateAction<TMDBGroupResourceListItem[]>>;
-  setLastDoc: React.Dispatch<
-    SetStateAction<QueryDocumentSnapshot<DocumentData> | null>
-  >;
-};
 export default function SentinelRefetchObserver({
   isFetchingMore,
   lastDoc,

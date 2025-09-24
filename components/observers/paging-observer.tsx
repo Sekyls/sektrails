@@ -1,13 +1,8 @@
 "use client";
+import { ObserverProps } from "@/lib/types";
 import { Loader2Icon } from "lucide-react";
 import React, { useEffect, useRef } from "react";
 
-type ObserverProps = {
-  isLoading: boolean;
-  totalPages: number;
-  page: number;
-  setPage: React.Dispatch<React.SetStateAction<number>>;
-};
 export default function SentinelObserver({
   isLoading,
   totalPages,

@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import { useParams, usePathname } from "next/navigation";
 import useFetchTMDBResource from "@/hooks/use-tmdb-fetch";
 import { TMDBApiPaths, TMDBGroupResourceListItem } from "@/lib/types";

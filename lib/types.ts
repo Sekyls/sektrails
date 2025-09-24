@@ -1,7 +1,7 @@
 import { Icon } from "@tabler/icons-react";
 import { User } from "firebase/auth";
 import { Dispatch, SetStateAction } from "react";
-
+import type { DocumentData, QueryDocumentSnapshot } from "firebase/firestore";
 export type MobileToggleProps = {
   isOpen: boolean;
   setIsOpen: Dispatch<SetStateAction<boolean>>;
@@ -243,4 +243,23 @@ export type ToastOptions<T> = {
   loading?: string;
   success?: string | ((result: T) => string);
   error?: string | ((err: Error) => string);
+};
+
+export type ObserverProps = {
+  isLoading: boolean;
+  totalPages: number;
+  page: number;
+  setPage: React.Dispatch<React.SetStateAction<number>>;
+};
+
+export type BookmarksSentinelProps = {
+  user: User | null;
+  lastDoc: QueryDocumentSnapshot<DocumentData> | null;
+  isFetchingMore: boolean;
+  isLoading: boolean;
+  setIsFetchingMore: React.Dispatch<React.SetStateAction<boolean>>;
+  setDocs: React.Dispatch<SetStateAction<TMDBGroupResourceListItem[]>>;
+  setLastDoc: React.Dispatch<
+    SetStateAction<QueryDocumentSnapshot<DocumentData> | null>
+  >;
 };

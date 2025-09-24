@@ -4,6 +4,7 @@ import { Image, Link, Share } from "lucide-react";
 import React, { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
+import { withToast } from "@/lib/utils";
 
 export default function ShareResource({
   name,
@@ -83,30 +84,10 @@ export default function ShareResource({
   };
 
   const handleCopyToClipboard = async () => {
-    toast.promise(
-      navigator.clipboard.writeText(resourceUrl),
-
-      {
-        success: {
-          message: "",
-          description: "Movie link copied to clipboard",
-          action: {
-            label: "Success!",
-            onClick: () => {},
-          },
-          classNames: { actionButton: "bg-green-700! text-white!" },
-        },
-        error: {
-          message: "Bookmark addition failed",
-          description: "Something went wrong",
-          action: {
-            label: "Failed!",
-            onClick: () => {},
-          },
-          classNames: { actionButton: "bg-red-700! text-white!" },
-        },
-      }
-    );
+    withToast(navigator.clipboard.writeText(resourceUrl), {
+      success: "Movie link copied to clipboard",
+      error: "Bookmark addition failed",
+    });
   };
   return imageFile && navigator.canShare({ files: [imageFile] }) ? (
     <Popover>
