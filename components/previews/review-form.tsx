@@ -29,7 +29,7 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { cn, useToast } from "@/lib/utils";
+import { cn, withToast } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Loader2Icon, Star } from "lucide-react";
 import { useAuth } from "@/providers/firebase-auth-provider";
@@ -59,7 +59,7 @@ export default function ReviewForm({ mediaType, resourceID }: ReviewFormProps) {
       profileImage: user?.photoURL,
       ...values,
     };
-    useToast(handleAddReview(reviewFormData as ReviewFormData), {
+    withToast(handleAddReview(reviewFormData as ReviewFormData), {
       loading: "Adding review...",
       success: "Review addition successful",
     });

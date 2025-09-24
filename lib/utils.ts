@@ -20,7 +20,7 @@ export function getFriendlyErrorMessage(code: string) {
   }
 }
 
-export function useToast<T>(
+export function withToast<T>(
   promise: Promise<T>,
   { loading, success, error }: ToastOptions<T>
 ) {
